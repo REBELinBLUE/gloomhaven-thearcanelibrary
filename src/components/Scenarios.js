@@ -165,8 +165,19 @@ class ScenariosComponent extends GameComponent {
     // solo scenarios
     const soloColumns = _.map(RANGES[2], (i) => this.makeScenarioColumn(i));
 
-    // kickstarter scenarios
-    const kickstarterColumns = _.map(RANGES[3], (i) => this.makeScenarioColumn(i));
+    // into the unknown scenarios
+    const intoUnknownColumns = _.map(RANGES[3], (i) => this.makeScenarioColumn(i));
+
+    // capital intrigue scenarios
+    const capitalColumns = _.map(RANGES[4], (i) => this.makeScenarioColumn(i));
+
+    // the infinite beyond scenarios
+    const infiniteColumns = _.map(RANGES[5], (i) => this.makeScenarioColumn(i));
+
+    //the blacksmith and the bear scenarios
+    const blacksmithColumns = _.map(RANGES[6], (i) => this.makeScenarioColumn(i));
+
+    console.log(SCENARIOS)
 
     return (
       <div className="container scenarios-container">
@@ -177,8 +188,6 @@ class ScenariosComponent extends GameComponent {
               <p>Each button has a number that corresponds to a scenario in the scenario book. Selecting a scenario button will reveal its name and mark it as <strong>unlocked</strong>. You can do this when you place a sticker on the map.</p>
               <p>Selecting a scenario that has been unlocked will change its status to <strong>completed</strong>.</p>
               <p>Both the <strong>party achievements</strong> and <strong>global achievements</strong> that you have marked as gained and lost in the app will determine whether you are eligible to do a scenario in campaign mode. The status of a scenario will <strong>update automatically</strong> as you gain and lose party and global achievements.</p>
-              <p>Please note that the achievement requirements should be up to date for the <strong>second printing</strong> of Gloomhaven, because there were a number of loopholes closed. Please see the <strong>Scenario book</strong> and <strong>Sticker sheets</strong> section of <a href="https://boardgamegeek.com/thread/1761512/official-second-printing-change-log">Official Second Printing Change Log</a> for further details if you own the original printing.</p>
-              <p>The <strong>Kickstarer scenarios</strong> start with <strong>K</strong> (eg. K9). The <strong>solo scenarios</strong> start with <strong>S</strong> (eg. S11) and are in the order presented in the solo scenario book.</p>
             </Col>
           </Row>
           <Row className="scenario-key">
@@ -217,14 +226,29 @@ class ScenariosComponent extends GameComponent {
           <Row>
             <Col lg={12}>
               <h2>{ExpansionConstants.SOLO}</h2>
-              <p>Coresponding scenario is unlocked whether the class reaches level 5.</p>
+              <p>Corresponding scenario is unlocked whether the class reaches level 5.</p>
             </Col>
             {soloColumns}
           </Row>
           <hr />
           <Row>
-            <Col lg={12}><h2>{ExpansionConstants.KICKSTARTER}</h2></Col>
-            {kickstarterColumns}
+            <Col lg={12}><h2>{ExpansionConstants.INTO_THE_UNKNOWN}</h2></Col>
+            {intoUnknownColumns}
+          </Row>
+          <hr />
+          <Row>
+            <Col lg={12}><h2>{ExpansionConstants.CAPITAL_INTRIGUE}</h2></Col>
+            {capitalColumns}
+          </Row>
+          <hr />
+          <Row>
+            <Col lg={12}><h2>{ExpansionConstants.INFINITE_BEYOND}</h2></Col>
+            {infiniteColumns}
+          </Row>
+          <hr />
+          <Row>
+            <Col lg={12}><h2>{ExpansionConstants.BLACKSMITH_AND_BEAR}</h2></Col>
+            {blacksmithColumns}
           </Row>
         </Grid>
       </div>

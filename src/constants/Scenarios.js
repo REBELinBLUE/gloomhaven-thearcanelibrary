@@ -2,8 +2,11 @@ import _ from 'underscore';
 import {GLOBAL_ACHIEVEMENTS} from './Achievements';
 import {PARTY_ACHIEVEMENTS} from './Party';
 
-export const KICKSTARTER_PREFIX = 801;
+export const UNKNOWN_PREFIX = 801;
 export const SOLO_PREFIX = 901;
+export const CAPITAL_PREFIX = 1001;
+export const INFINITE_PREFIX = 1101;
+export const BLACKSMITH_PREFIX = 1201;
 
 export const FC_START = 96;
 export const FC_END = 115;
@@ -1262,104 +1265,6 @@ const extra_scenarios = [
   }
 ];
 
-const kickstarter_scenarios = [
-  {
-    symbol: "K1",
-    title: "Just Another Night",
-    monsters:
-        [   {"name": "Bandit Archer"}
-        ,   {"name": "Bandit Guard"}
-        ,   {"name": "Inox Archer"}
-        ,   {"name": "Inox Guard"}
-        ,   {"name": "Inox Shaman"}
-        ]
-  },
-  {
-    symbol: "K2",
-    title: "A Quatryl Scorned",
-    monsters:
-        [   {"name": "Bandit Archer"}
-        ,   {"name": "Bandit Guard"}
-        ,   {"name": "Ancient Artillery"}
-        ]
-  },
-  {
-    symbol: "K3",
-    title: "Unreliable Medicine",
-    monsters:
-        [   {"name": "Giant Viper"}
-        ,   {"name": "Earth Demon"}
-        ,   {"name": "Vermling Scout"}
-        ,   {"name": "Vermling Shaman"}
-        ]
-  },
-  {
-    symbol: "K4",
-    title: "Unlikely Allies",
-    monsters:
-        [   {"name": "Vermling Scout"}
-        ,   {"name": "Giant Viper"}
-        ]
-  },
-  {
-    symbol: "K5",
-    title: "The Sun Spire",
-    monsters:
-        [   {"name": "Vermling Scout"}
-        ,   {"name": "Sun Demon"}
-        ,   {"name": "Black Imp"}
-        ,   {"name": "Vermling Shaman"}
-        ]
-  },
-  {
-    symbol: "K6",
-    title: "A Ship in a Storm",
-    monsters:
-        [   {"name": "Wind Demon"}
-        ,   {"name": "Lurker"}
-        ,   {"name": "Frost Demon"}
-        ]
-  },
-  {
-    symbol: "K7",
-    title: "Arrival in Chains",
-    monsters:
-        [   {"name": "Cave Bear"}
-        ,   {"name": "Rending Drake"}
-        ,   {"name": "Spitting Drake"}
-        ,   {"name": "Stone Golem"}
-        ]
-  },
-  {
-    symbol: "K8",
-    title: "The Doctor's Lab",
-    monsters:
-        [   {"name": "Living Bones"}
-        ,   {"name": "Ancient Artillery"}
-        ,   {"name": "Ooze"}
-        ,   {"name": "Stone Golem"}
-        ]
-  },
-  {
-    symbol: "K9",
-    title: "Skewed Perspective",
-    monsters:
-        [   {"name": "Hound"}
-        ,   {"name": "Cultist"}
-        ,   {"name": "Living Spirit"}
-        ,   {"name": "Living Bones"}
-        ]
-  },
-  {
-    symbol: "K10",
-    title: "Panic Room",
-    monsters:
-        [   {"name": "Night Demon"}
-        ,   {"name": "Deep Terror"}
-        ]
-  },
-];
-
 const solo_scenarios = [
   {
     symbol: "S1",
@@ -1553,18 +1458,419 @@ const solo_scenarios = [
   },
 ];
 
+const into_the_unknown_scenarios = [
+  {
+    symbol: "UN1",
+    title: "Just Another Night",
+    monsters:
+        [   {"name": "Bandit Archer"}
+        ,   {"name": "Bandit Guard"}
+        ,   {"name": "Inox Archer"}
+        ,   {"name": "Inox Guard"}
+        ,   {"name": "Inox Shaman"}
+        ]
+  },
+  {
+    symbol: "UN2",
+    title: "A Quatryl Scorned",
+    monsters:
+        [   {"name": "Bandit Archer"}
+        ,   {"name": "Bandit Guard"}
+        ,   {"name": "Ancient Artillery"}
+        ]
+  },
+  {
+    symbol: "UN3",
+    title: "Unreliable Medicine",
+    monsters:
+        [   {"name": "Giant Viper"}
+        ,   {"name": "Earth Demon"}
+        ,   {"name": "Vermling Scout"}
+        ,   {"name": "Vermling Shaman"}
+        ]
+  },
+  {
+    symbol: "UN4",
+    title: "Unlikely Allies",
+    monsters:
+        [   {"name": "Vermling Scout"}
+        ,   {"name": "Giant Viper"}
+        ]
+  },
+  {
+    symbol: "UN5",
+    title: "The Sun Spire",
+    monsters:
+        [   {"name": "Vermling Scout"}
+        ,   {"name": "Sun Demon"}
+        ,   {"name": "Black Imp"}
+        ,   {"name": "Vermling Shaman"}
+        ]
+  },
+  {
+    symbol: "UN6",
+    title: "A Ship in a Storm",
+    monsters:
+        [   {"name": "Wind Demon"}
+        ,   {"name": "Lurker"}
+        ,   {"name": "Frost Demon"}
+        ]
+  },
+  {
+    symbol: "UN7",
+    title: "Arrival in Chains",
+    monsters:
+        [   {"name": "Cave Bear"}
+        ,   {"name": "Rending Drake"}
+        ,   {"name": "Spitting Drake"}
+        ,   {"name": "Stone Golem"}
+        ]
+  },
+  {
+    symbol: "UN8",
+    title: "The Doctor's Lab",
+    monsters:
+        [   {"name": "Living Bones"}
+        ,   {"name": "Ancient Artillery"}
+        ,   {"name": "Ooze"}
+        ,   {"name": "Stone Golem"}
+        ]
+  },
+  {
+    symbol: "UN9",
+    title: "Skewed Perspective",
+    monsters:
+        [   {"name": "Hound"}
+        ,   {"name": "Cultist"}
+        ,   {"name": "Living Spirit"}
+        ,   {"name": "Living Bones"}
+        ]
+  },
+  {
+    symbol: "UN10",
+    title: "Panic Room",
+    monsters:
+        [   {"name": "Night Demon"}
+        ,   {"name": "Deep Terror"}
+        ]
+  },
+];
+
+const capital_intrigue_scenarios = [
+  {
+    symbol: "CI1",
+    title: "Blood and Glory",
+    monsters:
+        [   {"name": "City Guard"}
+        ,   {"name": "City Archer"}
+        ,   {"name": "Inox Guard"}
+        ,   {"name": "Inox Shaman"}
+        ,   {"name": "Rending Drake"}
+        ,   {"name": "Spitting Drake"}
+        ]
+  },
+  {
+    symbol: "CI2",
+    title: "Jailbreak",
+    monsters:
+        [   {"name": "Harrower Infester"}
+        ,   {"name": "City Guard"}
+        ,   {"name": "Giant Viper"}
+        ]
+  },
+  {
+    symbol: "CI3",
+    title: "Slippery Slope",
+    monsters:
+        [   {"name": "Ooze"}
+        ,   {"name": "Living Corpse"}
+        ,   {"name": "Wind Demon"}
+        ]
+  },
+  {
+    symbol: "CI4",
+    title: "Emergent Evidence",
+    monsters:
+        [   {"name": "Giant Viper"}
+        ,   {"name": "Night Demon"}
+        ,   {"name": "Cultist"}
+        ]
+  },
+  {
+    symbol: "CI5",
+    title: "They Just Keep Coming",
+    monsters:
+        [   {"name": "Savvas Lavaflow"}
+        ,   {"name": "Cultist"}
+        ,   {"name": "Flame Demon"}
+        ,   {"name": "Earth Demon"}
+        ]
+  },
+  {
+    symbol: "CI6",
+    title: "Peer Pressure",
+    monsters:
+        [   {"name": "Hound"}
+        ,   {"name": "City Guard"}
+        ,   {"name": "City Archer"}
+        ]
+  },
+  {
+    symbol: "CI7",
+    title: "The Chase",
+    monsters:
+        [   {"name": "Bandit Archer"}
+        ,   {"name": "Cultist"}
+        ]
+  },
+  {
+    symbol: "CI8",
+    title: "Breaking and Entering",
+    monsters:
+        [   {"name": "Night Demon"}
+        ,   {"name": "City Guard"}
+        ,   {"name": "City Archer"}
+        ,   {"name": "Cultist"}
+        ]
+  },
+  {
+    symbol: "CI9",
+    title: "Legal Entanglements",
+    monsters:
+        [   {"name": "Captain of the Guard"}
+        ,   {"name": "City Guard"}
+        ]
+  },
+  {
+    symbol: "CI10",
+    title: "Beasts of Order and Chaos",
+    monsters:
+        [   {"name": "Captain of the Guard"}
+        ,   {"name": "Winged Horror"}
+        ,   {"name": "City Guard"}
+        ,   {"name": "Cultist"}
+        ,   {"name": "Night Demon"}
+        ]
+  },
+];
+
+const infinite_beyond_scenarios = [
+  {
+    symbol: "IB1",
+    title: "Planar Prison",
+    monsters:
+        [   {"name": "Harrower Infester"}
+        ,   {"name": "Cave Bear"}
+        ,   {"name": "City Archer"}
+        ,   {"name": "Living Corpse"}
+        ]
+  },
+  {
+    symbol: "IB2",
+    title: "Gas Giants",
+    monsters:
+        [   {"name": "Ancient Artillery"}
+        ,   {"name": "City Guard"}
+        ,   {"name": "Rending Drake"}
+        ,   {"name": "Vermling Scout"}
+        ]
+  },
+  {
+    symbol: "IB3",
+    title: "A Beast in the Clouds",
+    monsters:
+        [   {"name": "Wind Demon"}
+        ]
+  },
+  {
+    symbol: "IB4",
+    title: "Exposed",
+    monsters:
+        [   {"name": "Flame Demon"}
+        ,   {"name": "Night Demon"}
+        ,   {"name": "Bandit Archer"}
+        ]
+  },
+  {
+    symbol: "IB5",
+    title: "The Horn of G'threbrax",
+    monsters:
+        [   {"name": "Deep Terror"}
+        ,   {"name": "Stone Golem"}
+        ,   {"name": "Black Imp"}
+        ]
+  },
+  {
+    symbol: "IB6",
+    title: "A House of Doors",
+    monsters:
+        [   {"name": "Forest Imp"}
+        ,   {"name": "Sun Demon"}
+        ,   {"name": "Wind Demon"}
+        ]
+  },
+  {
+    symbol: "IB7",
+    title: "Ascendance",
+    monsters:
+        [   {"name": "Earth Demon"}
+        ,   {"name": "Forest Imp"}
+        ,   {"name": "Giant Viper"}
+        ]
+  },
+  {
+    symbol: "IB8",
+    title: "The Other Side of Infinity",
+    monsters:
+        [ ]
+  },
+  {
+    symbol: "IB9",
+    title: "Blood in the Streets",
+    monsters:
+        [   {"name": "Bandit Archer"}
+        ,   {"name": "Bandit Guard"}
+        ,   {"name": "Hound"}
+        ]
+  },
+  {
+    symbol: "IB10",
+    title: "The Many Paths Before Us",
+    monsters:
+        [   {"name": "Night Demon"}
+        ,   {"name": "Bandit Archer"}
+        ,   {"name": "Vermling Scout"}
+        ,   {"name": "Deep Terror"}
+        ,   {"name": "Night Demon"}
+        ,   {"name": "Raider King"}
+        ]
+  },
+];
+
+const blacksmith_and_bear_scenarios = [
+  {
+    symbol: "BB1",
+    title: "Rocky Start",
+    monsters:
+        [   {"name": "Earth Demon"}
+        ,   {"name": "Flame Demon"}
+        ,   {"name": "Frost Demon"}
+        ,   {"name": "Savvas Icestorm"}
+        ,   {"name": "Savvas Lavaflow"}
+        ,   {"name": "Wind Demon"}
+        ]
+  },
+  {
+    symbol: "BB2",
+    title: "Nest of Pain",
+    monsters:
+        [   {"name": "Rending Drake"}
+        ,   {"name": "Spitting Drake"}
+        ]
+  },
+  {
+    symbol: "BB3",
+    title: "Hissing in the Dark",
+    monsters:
+        [   {"name": "Earth Demon"}
+        ,   {"name": "Rending Drake"}
+        ,   {"name": "Spitting Drake"}
+        ]
+  },
+  {
+    symbol: "BB4",
+    title: "Crystal Rampage",
+    monsters:
+        [   {"name": "Cave Bear"}
+        ,   {"name": "Forest Imp"}
+        ]
+  },
+  {
+    symbol: "BB5",
+    title: "Call of the Star Iron",
+    monsters:
+        [   {"name": "Ooze"}
+        ,   {"name": "Stone Golem"}
+        ]
+  },
+  {
+    symbol: "BB6",
+    title: "Blood for Iron",
+    monsters:
+        [   {"name": "Bandit Archer"}
+        ,   {"name": "Bandit Guard"}
+        ,   {"name": "Deep Terror"}
+        ,   {"name": "Night Demon"}
+        ]
+  },
+  {
+    symbol: "BB7",
+    title: "Descent into Madness",
+    monsters:
+        [   {"name": "Cultist"}
+        ,   {"name": "Living Bones"}
+        ,   {"name": "Sun Demon"}
+        ]
+  },
+  {
+    symbol: "BB8",
+    title: "Spreading Joy",
+    monsters:
+        [   {"name": "Bandit Guard"}
+        ,   {"name": "Cave Bear"}
+        ,   {"name": "Living Spirit"}
+        ]
+  },
+  {
+    symbol: "BB9",
+    title: "Emerging Malevolence",
+    monsters:
+        [   {"name": "Black Imp"}
+        ,   {"name": "Deep Terror"}
+        ,   {"name": "Lurker"}
+        ]
+  },
+  {
+    symbol: "BB10",
+    title: "Spirited Escape",
+    monsters:
+        [   {"name": "Cave Bear"}
+        ,   {"name": "Flame Demon"}
+        ,   {"name": "Night Demon"}
+        ,   {"name": "Stone Golem"}
+        ]
+  },
+];
+
 export const SCENARIOS = Object.assign({}, base_scenarios);
 SCENARIOS[FC_CHALLENGE] = extra_scenarios[0];
-for (const [i, scenario] of kickstarter_scenarios.entries()) {
-  SCENARIOS[KICKSTARTER_PREFIX + i] = scenario;
-}
+
 for (const [i, scenario] of solo_scenarios.entries()) {
   SCENARIOS[SOLO_PREFIX + i] = scenario;
+}
+
+for (const [i, scenario] of into_the_unknown_scenarios.entries()) {
+  SCENARIOS[UNKNOWN_PREFIX + i] = scenario;
+}
+
+for (const [i, scenario] of capital_intrigue_scenarios.entries()) {
+  SCENARIOS[CAPITAL_PREFIX + i] = scenario;
+}
+
+for (const [i, scenario] of infinite_beyond_scenarios.entries()) {
+  SCENARIOS[INFINITE_PREFIX + i] = scenario;
+}
+
+for (const [i, scenario] of blacksmith_and_bear_scenarios.entries()) {
+  SCENARIOS[BLACKSMITH_PREFIX + i] = scenario;
 }
 
 export const RANGES = [
   _.range(1, FC_START),
   _.range(FC_START, FC_END + 1).concat([FC_CHALLENGE]),
   _.range(SOLO_PREFIX, SOLO_PREFIX + solo_scenarios.length),
-  _.range(KICKSTARTER_PREFIX, KICKSTARTER_PREFIX + kickstarter_scenarios.length),
+  _.range(UNKNOWN_PREFIX, UNKNOWN_PREFIX + into_the_unknown_scenarios.length),
+  _.range(CAPITAL_PREFIX, CAPITAL_PREFIX + capital_intrigue_scenarios.length),
+  _.range(INFINITE_PREFIX, INFINITE_PREFIX + infinite_beyond_scenarios.length),
+  _.range(BLACKSMITH_PREFIX, BLACKSMITH_PREFIX + blacksmith_and_bear_scenarios.length),
 ];

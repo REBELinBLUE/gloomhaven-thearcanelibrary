@@ -4,8 +4,6 @@ import { Navbar, Button, Glyphicon } from 'react-bootstrap';
 import GameActions from '../actions/GameActions';
 import ErrorActions from '../actions/ErrorActions';
 import FileReaderInput from 'react-file-reader-input';
-import DropboxChooser from './DropboxChooser';
-import DropboxSaver from './DropboxSaver';
 
 class HeaderComponent extends Component {
 
@@ -79,8 +77,6 @@ class HeaderComponent extends Component {
             </li>
           </ul>
           <div className="navbar-btn">
-            <DropboxChooser></DropboxChooser>
-            <DropboxSaver></DropboxSaver>
             <FileReaderInput className="load-game-file-input" as="text" id="my-file-input" onChange={this.loadGame}>
               <Button className="btn-brute"><Glyphicon glyph="save-file" /> Import</Button>
             </FileReaderInput>
