@@ -1,5 +1,5 @@
 export default {
-  BASE: 'Base game',
+  BASE: 'Base Game',
   FORGOTTEN_CIRCLES: 'Forgotten Circles',
   SOLO: 'Solo',
   INTO_THE_UNKNOWN: 'Into the Unknown',

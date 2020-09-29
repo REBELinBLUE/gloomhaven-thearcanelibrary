@@ -179,10 +179,10 @@ class AchievementsComponent extends GameComponent {
           </Row>
           <Row className="global-achievement-key">
             <Col xs={12} md={6} className="text-center">
-              <Button className="btn-completed">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button> Achievement complete
+              <Button className="btn-completed">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button> Achievement Completed
             </Col>
             <Col xs={12} md={6} className="text-center">
-              <Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button> Achievement incomplete (or lost)
+              <Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button> Achievement Incomplete or Lost
             </Col>
           </Row>
           <Row>

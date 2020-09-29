@@ -94,7 +94,9 @@ class MonsterHealthComponent extends GameComponent {
       );
     }
 
-    let buttonText = `${monsterToDisplay.name} ${monsterToDisplay.number}`;
+    console.log(monsterToDisplay)
+
+    let buttonText = `${monsterToDisplay.label || monsterToDisplay.name} ${monsterToDisplay.number}`;
     if (monsterToDisplay.summon && monsterToDisplay.alive) {
       buttonText += '*';
     }
@@ -987,8 +989,7 @@ class MonsterHealthComponent extends GameComponent {
               </Col>
               <Col xs={6} md={2}>
                 <Button block className={this.state.healToggled ? 'btn-unlocked' : ''} onClick={() => this.toggleHeal()}>
-                  Heal
-                  {this.state.healAmount}
+                  Heal {this.state.healAmount}
                 </Button>
               </Col>
               <Col xs={3} md={1}>

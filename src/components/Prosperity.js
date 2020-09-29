@@ -360,7 +360,7 @@ class ProsperityComponent extends GameComponent {
               <Button className="btn-unlocked">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button> Treasure in available scenario
             </Col>
             <Col xs={12} md={4} className="text-center">
-              <Button className="btn-blocked">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button> Missed Treasure in complete scenario
+              <Button className="btn-blocked">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button> Missed treasure in complete scenario
             </Col>
           </Row>
           <Row className="treasure-container">

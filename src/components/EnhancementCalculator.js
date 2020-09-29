@@ -379,7 +379,7 @@ class EnhancementCalculatorComponent extends Component {
             </div>
           }
 
-          {this.state.stickerType === "summonPlus1" &&
+          {this.state.stickerType === 'summonPlus1' &&
             <div>
               <hr />
               {this.makeLabelRow('Enhancement Effect')}
@@ -389,7 +389,7 @@ class EnhancementCalculatorComponent extends Component {
             </div>
           }
 
-          {this.state.stickerType === "attackHex" &&
+          {this.state.stickerType === 'attackHex' &&
             <div>
               <hr />
               {this.makeLabelRow('Number of Hexes Currently Targeted with the Attack')}
@@ -432,7 +432,7 @@ class EnhancementCalculatorComponent extends Component {
           {this.showOtherOptions() && this.state.stickerType !== 'attackHex' &&
             <div>
               <hr />
-              {this.makeLabelRow('Ability has Multple Targets')}
+              {this.makeLabelRow('Ability has Multiple Targets')}
               <Row>
                 <Col className="enhancement-col" xs={12} md={12}>
                   <Button block onClick={() => this.multipleTargetClick()} className={this.state.multipleTargets && "btn-selected-light"}>{this.state.multipleTargets ? 'Yes' : 'No'} (Double base cost)</Button>

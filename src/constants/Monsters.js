@@ -57,5 +57,5 @@ export const BOSSES = {
   VALRATH_COMMANDER: 'Valrath Commander',
   WINGED_HORROR: 'Winged Horror',
 
-  RAIDER_KING: 'Raider King',
+  RAIDER_KING: 'Raider King', // Special representation of the Bandit Commander
 };

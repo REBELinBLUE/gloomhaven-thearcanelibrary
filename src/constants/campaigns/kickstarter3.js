@@ -87,7 +87,7 @@ export const INFINITE_BEYOND_SCENARIOS = [
       { name: MONSTERS.VERMLING_SCOUT },
       { name: MONSTERS.DEEP_TERROR },
       { name: MONSTERS.NIGHT_DEMON },
-      { name: BOSSES.RAIDER_KING },
+      { name: BOSSES.BANDIT_COMMANDER, label: BOSSES.RAIDER_KING }, // fixme: figure out how to do this
     ],
   },
 ];

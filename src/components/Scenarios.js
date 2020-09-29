@@ -133,7 +133,9 @@ class ScenariosComponent extends GameComponent {
     const campaignMissionColumns = [];
     const personalQuestColumns = [];
     const randomScenarioColumns = [];
-    const otherColumns = [];
+    const sealedScenarioColumns = [];
+    const cityEventColumns = [];
+    const roadEventColumns = [];
 
     // campaign missions
     for (let i = 1; i <= 51; i++) {
@@ -150,9 +152,33 @@ class ScenariosComponent extends GameComponent {
       randomScenarioColumns.push(this.makeScenarioColumn(i));
     }
 
-    // other (class & events) scenarios
-    for (let i = 72; i <= 95; i++) {
-      otherColumns.push(this.makeScenarioColumn(i));
+    // sealed
+    sealedScenarioColumns.push(this.makeScenarioColumn(72));
+    sealedScenarioColumns.push(this.makeScenarioColumn(73));
+    sealedScenarioColumns.push(this.makeScenarioColumn(76));
+    sealedScenarioColumns.push(this.makeScenarioColumn(77));
+    sealedScenarioColumns.push(this.makeScenarioColumn(84));
+
+    // road events
+    roadEventColumns.push(this.makeScenarioColumn(80));
+    roadEventColumns.push(this.makeScenarioColumn(82));
+    roadEventColumns.push(this.makeScenarioColumn(85));
+    roadEventColumns.push(this.makeScenarioColumn(90));
+
+    // city events
+    cityEventColumns.push(this.makeScenarioColumn(74));
+    cityEventColumns.push(this.makeScenarioColumn(75));
+    cityEventColumns.push(this.makeScenarioColumn(78));
+    cityEventColumns.push(this.makeScenarioColumn(79));
+    cityEventColumns.push(this.makeScenarioColumn(81));
+    cityEventColumns.push(this.makeScenarioColumn(83));
+
+    for (let i = 86; i <= 89; i++) {
+      cityEventColumns.push(this.makeScenarioColumn(i));
+    }
+
+    for (let i = 91; i <= 94; i++) {
+      cityEventColumns.push(this.makeScenarioColumn(i));
     }
 
     // Forgotten Circles
@@ -172,8 +198,6 @@ class ScenariosComponent extends GameComponent {
 
     // the blacksmith and the bear scenarios
     const blacksmithColumns = _.map(RANGES[6], (i) => this.makeScenarioColumn(i));
-
-    console.log(SCENARIOS);
 
     return (
       <div className="container scenarios-container">
@@ -195,31 +219,47 @@ class ScenariosComponent extends GameComponent {
             </Col>
           </Row>
           <Row className="scenario-key">
-            <Col xs={12} md={4} className="text-center">
-              <Button className="btn-completed">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button> Scenario successfully complete
+            <Col xs={12} md={3} className="text-center">
+              <Button className="btn-completed">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button> Scenario Completed
             </Col>
-            <Col xs={12} md={4} className="text-center">
-              <Button className="btn-unlocked">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button> Scenario unlocked
+            <Col xs={12} md={3} className="text-center">
+              <Button className="btn-unlocked">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button> Scenario Unlocked
             </Col>
-            <Col xs={12} md={4} className="text-center">
-              <Button className="btn-blocked">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button> Ineligible for scenario
+            <Col xs={12} md={3} className="text-center">
+              <Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button> Scenario Locked
+            </Col>
+            <Col xs={12} md={3} className="text-center">
+              <Button className="btn-blocked">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button> Ineligible for Scenario
             </Col>
           </Row>
           <Row>
-            <Col lg={12}><h2>{ExpansionConstants.BASE}</h2></Col>
+            <Col lg={12}><h2>Main Story</h2></Col>
             {campaignMissionColumns}
           </Row>
           <hr />
           <Row>
+            <Col lg={12}><h3>Personal Quests</h3></Col>
             {personalQuestColumns}
           </Row>
           <hr />
           <Row>
+            <Col lg={12}><h3>Random Scenarios</h3></Col>
             {randomScenarioColumns}
           </Row>
           <hr />
           <Row>
-            {otherColumns}
+            <Col lg={12}><h3>Sealed Scenarios</h3></Col>
+            {sealedScenarioColumns}
+          </Row>
+          <hr />
+          <Row>
+            <Col lg={12}><h3>Road Events</h3></Col>
+            {roadEventColumns}
+          </Row>
+          <hr />
+          <Row>
+            <Col lg={12}><h3>City Events</h3></Col>
+            {cityEventColumns}
           </Row>
           <hr />
           <Row>
