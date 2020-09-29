@@ -25,7 +25,7 @@ class GameComponent extends Component {
 
   setStateAndUpdateGame(mutator, callback) {
     this.setState((state) => {
-      const change = _.isFunction(mutator) ? mutator(state): mutator;
+      const change = _.isFunction(mutator) ? mutator(state) : mutator;
       GameActions.changeGame(this.getGameUpdateFromState(change));
       return change;
     }, callback);

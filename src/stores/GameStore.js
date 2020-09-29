@@ -1,32 +1,33 @@
+import { EventEmitter } from 'events';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import GameConstants from '../constants/GameConstants';
-import { EventEmitter } from 'events';
-import {GLOBAL_ACHIEVEMENTS} from '../constants/Achievements';
+import { GLOBAL_ACHIEVEMENTS } from '../constants/Achievements';
 
-const CHANGE_GAME_EVENT = "changeGame";
+const CHANGE_GAME_EVENT = 'changeGame';
 const MAX_PROSPERITY = 64;
 
 // default object avoids null issues throughout app before a game is loaded
-let _game = Object.assign({
-  "version": 1,
-  "name": "",
-  "prosperity": 0,
-  "donations": 0,
-  "partyLocation": "",
-  "partyNotes": "",
-  "partyAchievements": {},
-  "reputation": 0,
-  "globalAchievements": {},
-  "scenariosUnlocked": [],
-  "scenariosComplete": [],
-  "treasuresUnlocked": [],
-  "monsterHealth": {
-    "defaultScenarioLevel": -1,
-    "defaultNumPlaying": -1,
-    "scenario": -1,
-    "monsters": {}
-  }
-}, upgradeGame(getGameLocalStorage()));
+let _game = {
+  version: 1,
+  name: '',
+  prosperity: 0,
+  donations: 0,
+  partyLocation: '',
+  partyNotes: '',
+  partyAchievements: {},
+  reputation: 0,
+  globalAchievements: {},
+  scenariosUnlocked: [],
+  scenariosComplete: [],
+  treasuresUnlocked: [],
+  monsterHealth: {
+    defaultScenarioLevel: -1,
+    defaultNumPlaying: -1,
+    scenario: -1,
+    monsters: {},
+  },
+  ...upgradeGame(getGameLocalStorage()),
+};
 
 function upgradeGame(game) {
   if (!game) {
@@ -62,7 +63,7 @@ function upgradeGame(game) {
         return 900 + num - 105;
       }
       return num;
-    }
+    };
     game.scenariosUnlocked = game.scenariosUnlocked.map(updater);
     game.scenariosComplete = game.scenariosComplete.map(updater);
     game.version = 1;
@@ -78,8 +79,7 @@ function setGame(game) {
 function getGameLocalStorage() {
   try {
     return JSON.parse(window.localStorage.getItem('game'));
-  }
-  catch (e) {
+  } catch (e) {
     return null;
   }
 }
@@ -87,17 +87,16 @@ function getGameLocalStorage() {
 function setGameLocalStorage(game) {
   try {
     window.localStorage.setItem('game', JSON.stringify(game));
-  }
-  catch (e) { }
+  } catch (e) { }
 }
 
 function changeProsperity(amount) {
   const newProsperity = Math.max(0, Math.min(MAX_PROSPERITY, _game.prosperity + amount));
-  changeGame({prosperity: newProsperity});
+  changeGame({ prosperity: newProsperity });
 }
 
 function changeGame(game) {
-  setGame(Object.assign({}, _game, game));
+  setGame({ ..._game, ...game });
 }
 
 class GameStoreClass extends EventEmitter {
@@ -106,11 +105,11 @@ class GameStoreClass extends EventEmitter {
   }
 
   addGameChangeListener(callback) {
-    this.on(CHANGE_GAME_EVENT, callback)
+    this.on(CHANGE_GAME_EVENT, callback);
   }
 
   removeGameChangeListener(callback) {
-    this.removeListener(CHANGE_GAME_EVENT, callback)
+    this.removeListener(CHANGE_GAME_EVENT, callback);
   }
 
   getGame() {
@@ -123,8 +122,8 @@ const GameStore = new GameStoreClass();
 // Here we register a callback for the dispatcher
 // and look for our various action types so we can
 // respond appropriately
-GameStore.dispatchToken = AppDispatcher.register(action => {
-  switch(action.actionType) {
+GameStore.dispatchToken = AppDispatcher.register((action) => {
+  switch (action.actionType) {
     case GameConstants.RECEIVE_GAME:
       // if required, convert an old save game to a new save game
       setGame(upgradeGame(action.game));

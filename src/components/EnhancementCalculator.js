@@ -1,110 +1,104 @@
 import React, { Component } from 'react';
-import { Grid, Row, Col, Button, Label } from 'react-bootstrap';
-import GloomhavenIcon from '../components/utils/GloomhavenIcon';
+import {
+  Grid, Row, Col, Button, Label,
+} from 'react-bootstrap';
+import GloomhavenIcon from './utils/GloomhavenIcon';
 
-const iconWidth = "17px";
+const iconWidth = '17px';
 
 const playerPlusOneAbilityLines = {
-  move: { cost: 30, title: "Move", icon: "generalMove" },
-  attack: { cost: 50, title: "Attack", icon: "generalAttack" },
-  range: { cost: 30, title: "Range", icon: "generalRange" },
-  shield: { cost: 100, title: "Shield", icon: "generalShield" },
-  push: { cost: 30, title: "Push", icon: "statusEffectPush" },
-  pull: { cost: 30, title: "Pull", icon: "statusEffectPull" },
-  pierce: { cost: 30, title: "Pierce", icon: "statusEffectPierce" },
-  retaliate: { cost: 100, title: "Retaliate", icon: "generalRetaliate" },
-  heal: { cost: 30, title: "Heal", icon: "generalHeal" },
-  target: { cost: 50, title: "Target", icon: "generalTarget" },
+  move: { cost: 30, title: 'Move', icon: 'generalMove' },
+  attack: { cost: 50, title: 'Attack', icon: 'generalAttack' },
+  range: { cost: 30, title: 'Range', icon: 'generalRange' },
+  shield: { cost: 100, title: 'Shield', icon: 'generalShield' },
+  push: { cost: 30, title: 'Push', icon: 'statusEffectPush' },
+  pull: { cost: 30, title: 'Pull', icon: 'statusEffectPull' },
+  pierce: { cost: 30, title: 'Pierce', icon: 'statusEffectPierce' },
+  retaliate: { cost: 100, title: 'Retaliate', icon: 'generalRetaliate' },
+  heal: { cost: 30, title: 'Heal', icon: 'generalHeal' },
+  target: { cost: 50, title: 'Target', icon: 'generalTarget' },
 };
 
 const summonPlusOneAbilityLines = {
-  move: { cost: 100, title: "Move", icon: "generalMove" },
-  attack: { cost: 100, title: "Attack", icon: "generalAttack" },
-  range: { cost: 50, title: "Range", icon: "generalRange" },
-  hp: { cost: 50, title: "HP", icon: "generalHeal" },
+  move: { cost: 100, title: 'Move', icon: 'generalMove' },
+  attack: { cost: 100, title: 'Attack', icon: 'generalAttack' },
+  range: { cost: 50, title: 'Range', icon: 'generalRange' },
+  hp: { cost: 50, title: 'HP', icon: 'generalHeal' },
 };
 
 const baseOtherEffects = {
-  poison: { cost: 75, title: "Poison", icon: "statusEffectPoison" },
-  wound: { cost: 75, title: "Wound", icon: "statusEffectWound" },
-  muddle: { cost: 50, title: "Muddle", icon: "statusEffectMuddle" },
-  immobilize: { cost: 100, title: "Immobilize", icon: "statusEffectImmobilize" },
-  disarm: { cost: 150, title: "Disarm", icon: "statusEffectDisarm" },
-  curse: { cost: 75, title: "Curse", icon: "statusEffectCurse" },
-  strengthen: { cost: 50, title: "Strengthen", icon: "statusEffectStrengthen" },
-  bless: { cost: 50, title: "Bless", icon: "statusEffectBless" },
-  jump: { cost: 50, title: "Jump", icon: "generalJump" },
-  anyElement: { cost: 150, title: "Any Element", icon: "elementAll" },
-  specificElement: { cost: 100, title: "Specific Element", icon: "elementFire" },
+  poison: { cost: 75, title: 'Poison', icon: 'statusEffectPoison' },
+  wound: { cost: 75, title: 'Wound', icon: 'statusEffectWound' },
+  muddle: { cost: 50, title: 'Muddle', icon: 'statusEffectMuddle' },
+  immobilize: { cost: 100, title: 'Immobilize', icon: 'statusEffectImmobilize' },
+  disarm: { cost: 150, title: 'Disarm', icon: 'statusEffectDisarm' },
+  curse: { cost: 75, title: 'Curse', icon: 'statusEffectCurse' },
+  strengthen: { cost: 50, title: 'Strengthen', icon: 'statusEffectStrengthen' },
+  bless: { cost: 50, title: 'Bless', icon: 'statusEffectBless' },
+  jump: { cost: 50, title: 'Jump', icon: 'generalJump' },
+  anyElement: { cost: 150, title: 'Any Element', icon: 'elementAll' },
+  specificElement: { cost: 100, title: 'Specific Element', icon: 'elementFire' },
 };
 
 const stickerTypes = {
-  playerPlus1: { title: "Player" },
-  summonPlus1: { title: "Summon" },
-  attackHex: { title: "Attack Hex" },
-  otherEffect: { title: "Other Effect" },
+  playerPlus1: { title: 'Player' },
+  summonPlus1: { title: 'Summon' },
+  attackHex: { title: 'Attack Hex' },
+  otherEffect: { title: 'Other Effect' },
 };
 
 const levelCost = [0, 25, 50, 75, 100, 125, 150, 175, 200];
 const previousEnhancementCost = [0, 75, 150, 225];
 
 class EnhancementCalculatorComponent extends Component {
-
   constructor() {
     super();
 
     this.state = {
-      stickerType: "", // +1 / summon +1 / attack hex / else
-      playerPlusOneAbility: "",
-      baseOtherEffect: "",
-      summonPlusOneAbility: "",
+      stickerType: '', // +1 / summon +1 / attack hex / else
+      playerPlusOneAbility: '',
+      baseOtherEffect: '',
+      summonPlusOneAbility: '',
       numberOfCurrentlyTargetedHexes: 2,
       levelOfAbilityCard: 1,
       numberOfPreviousEnhancements: 0,
-      multipleTargets: false
-    }
+      multipleTargets: false,
+    };
   }
 
   calculateCost() {
     let cost = 0;
 
-    if (this.state.stickerType === "playerPlus1") {
+    if (this.state.stickerType === 'playerPlus1') {
       if (this.state.playerPlusOneAbility) {
         cost += playerPlusOneAbilityLines[this.state.playerPlusOneAbility].cost;
-      }
-      else {
+      } else {
         // cannot yet calculate
         return 0;
       }
-    }
-    else if (this.state.stickerType === "summonPlus1") {
+    } else if (this.state.stickerType === 'summonPlus1') {
       if (this.state.summonPlusOneAbility) {
         cost += summonPlusOneAbilityLines[this.state.summonPlusOneAbility].cost;
-      }
-      else {
+      } else {
         // cannot yet calculate
         return 0;
       }
-    }
-    else if (this.state.stickerType === "attackHex") {
-      cost += Math.floor( 200 / this.state.numberOfCurrentlyTargetedHexes );
-    }
-    else if (this.state.stickerType === "otherEffect") {
+    } else if (this.state.stickerType === 'attackHex') {
+      cost += Math.floor(200 / this.state.numberOfCurrentlyTargetedHexes);
+    } else if (this.state.stickerType === 'otherEffect') {
       if (this.state.baseOtherEffect) {
         cost += baseOtherEffects[this.state.baseOtherEffect].cost;
-      }
-      else {
+      } else {
         // cannot yet calculate
         return 0;
       }
-    }
-    else {
+    } else {
       // no legal option selected
       return 0;
     }
 
     // double BASE COST if multiple targets (does not apply for attack hex)
-    if (this.state.multipleTargets && this.state.stickerType !== "attackHex") {
+    if (this.state.multipleTargets && this.state.stickerType !== 'attackHex') {
       cost *= 2;
     }
 
@@ -120,94 +114,87 @@ class EnhancementCalculatorComponent extends Component {
   stickerTypeClick(stickerType) {
     if (this.state.stickerType === stickerType) {
       this.setState({
-        stickerType: ""
+        stickerType: '',
       });
-    }
-    else {
+    } else {
       this.setState({
-        stickerType: stickerType
-      });      
+        stickerType,
+      });
     }
   }
 
   summonPlusOneAbilityClick(effect) {
     if (this.state.summonPlusOneAbility === effect) {
       this.setState({
-        summonPlusOneAbility: ""
+        summonPlusOneAbility: '',
       });
-    }
-    else {
+    } else {
       this.setState({
-        summonPlusOneAbility: effect
-      });  
+        summonPlusOneAbility: effect,
+      });
     }
   }
 
   baseOtherEffectClick(effect) {
     if (this.state.baseOtherEffect === effect) {
       this.setState({
-        baseOtherEffect: ""
+        baseOtherEffect: '',
       });
-    }
-    else {
+    } else {
       this.setState({
-        baseOtherEffect: effect
-      });  
+        baseOtherEffect: effect,
+      });
     }
   }
 
   playerPlusOneAbilityClick(abilityLine) {
     if (this.state.playerPlusOneAbility === abilityLine) {
       this.setState({
-        playerPlusOneAbility: ""
+        playerPlusOneAbility: '',
       });
-    }
-    else {
+    } else {
       this.setState({
-        playerPlusOneAbility: abilityLine
-      });  
+        playerPlusOneAbility: abilityLine,
+      });
     }
   }
 
   levelClick(level) {
     this.setState({
-      levelOfAbilityCard: level
+      levelOfAbilityCard: level,
     });
   }
 
   numberOfHexesClick(hexes) {
     this.setState({
-      numberOfCurrentlyTargetedHexes: hexes
+      numberOfCurrentlyTargetedHexes: hexes,
     });
   }
 
   previousEnhancementClick(number) {
     this.setState({
-      numberOfPreviousEnhancements: number
+      numberOfPreviousEnhancements: number,
     });
   }
 
   multipleTargetClick() {
     this.setState({
-      multipleTargets: !this.state.multipleTargets
-    }); 
+      multipleTargets: !this.state.multipleTargets,
+    });
   }
 
   showOtherOptions() {
-    if (this.state.stickerType === "playerPlus1") {
+    if (this.state.stickerType === 'playerPlus1') {
       if (this.state.playerPlusOneAbility) {
         return true;
       }
-    }
-    else if (this.state.stickerType === "summonPlus1") {
+    } else if (this.state.stickerType === 'summonPlus1') {
       if (this.state.summonPlusOneAbility) {
         return true;
       }
-    }
-    else if (this.state.stickerType === "attackHex") {
+    } else if (this.state.stickerType === 'attackHex') {
       return true;
-    }
-    else if (this.state.stickerType === "otherEffect") {
+    } else if (this.state.stickerType === 'otherEffect') {
       if (this.state.baseOtherEffect) {
         return true;
       }
@@ -227,17 +214,17 @@ class EnhancementCalculatorComponent extends Component {
   }
 
   render() {
-    let cost = this.calculateCost();
+    const cost = this.calculateCost();
 
-    let enhancementTypeColumns = [];
-    let playerPlusOneAbilityColumns = [];
-    let baseOtherEffectColumns = [];
-    let summonPlusOneAbilityColumns = [];
-    let abilityCardLevelColumns = [];
-    let previousEnhancementsColumns = [];
-    let numberOfHexesColumns = [];
+    const enhancementTypeColumns = [];
+    const playerPlusOneAbilityColumns = [];
+    const baseOtherEffectColumns = [];
+    const summonPlusOneAbilityColumns = [];
+    const abilityCardLevelColumns = [];
+    const previousEnhancementsColumns = [];
+    const numberOfHexesColumns = [];
 
-    for (let i=2; i<=13; i++) {
+    for (let i = 2; i <= 13; i++) {
       numberOfHexesColumns.push(
         <Col className="enhancement-col" key={i} xs={4} md={3}>
           <Button block onClick={() => this.numberOfHexesClick(i)} className={this.state.numberOfCurrentlyTargetedHexes === i && "btn-selected-light"}>
@@ -247,7 +234,7 @@ class EnhancementCalculatorComponent extends Component {
       );
     }
 
-    for (let i=0; i<=3; i++) {
+    for (let i = 0; i <= 3; i++) {
       previousEnhancementsColumns.push(
         <Col className="enhancement-col" key={i} xs={6} md={3}>
           <Button block onClick={() => this.previousEnhancementClick(i)} className={this.state.numberOfPreviousEnhancements === i && "btn-selected-light"}>
@@ -270,7 +257,7 @@ class EnhancementCalculatorComponent extends Component {
     for (let stickerType in stickerTypes) {
       if (stickerTypes.hasOwnProperty(stickerType)) {
         let type = stickerTypes[stickerType];
-        
+
         let icons = "";
         if (stickerType === "attackHex") {
           icons = <GloomhavenIcon icon="generalAttackHex" width={iconWidth} />
@@ -282,10 +269,9 @@ class EnhancementCalculatorComponent extends Component {
               <GloomhavenIcon icon="generalJump" width={iconWidth} />&nbsp;
               <GloomhavenIcon icon="statusEffectMuddle" width={iconWidth} />
             </span>
-          )
-        }
-        else {
-          icons = <GloomhavenIcon icon="generalPlusOne" width={iconWidth} />
+          );
+        } else {
+          icons = <GloomhavenIcon icon="generalPlusOne" width={iconWidth} />;
         }
 
         enhancementTypeColumns.push(
@@ -301,19 +287,19 @@ class EnhancementCalculatorComponent extends Component {
     for (let baseOtherEffect in baseOtherEffects) {
       if (baseOtherEffects.hasOwnProperty(baseOtherEffect)) {
         let effect = baseOtherEffects[baseOtherEffect];
-        
+
         let xs = 6;
         let md = 3;
-        if (baseOtherEffect === "specificElement" || baseOtherEffect === "anyElement" || baseOtherEffect === "jump") {
+        if (baseOtherEffect === 'specificElement' || baseOtherEffect === 'anyElement' || baseOtherEffect === 'jump') {
           xs = 12;
         }
 
-        if (baseOtherEffect === "specificElement") {
+        if (baseOtherEffect === 'specificElement') {
           md = 6;
         }
 
-        let icons = <GloomhavenIcon icon={effect.icon} width={iconWidth} />
-        if (baseOtherEffect === "specificElement") {
+        let icons = <GloomhavenIcon icon={effect.icon} width={iconWidth} />;
+        if (baseOtherEffect === 'specificElement') {
           icons = (
             <span>
               <GloomhavenIcon icon="elementAir" width={iconWidth} />&nbsp;
@@ -323,7 +309,7 @@ class EnhancementCalculatorComponent extends Component {
               <GloomhavenIcon icon="elementFire" width={iconWidth} />&nbsp;
               <GloomhavenIcon icon="elementEarth" width={iconWidth} />&nbsp;
             </span>
-          )
+          );
         }
 
         baseOtherEffectColumns.push(
@@ -338,7 +324,7 @@ class EnhancementCalculatorComponent extends Component {
 
     for (let playerPlusOneAbilityLine in playerPlusOneAbilityLines) {
       if (playerPlusOneAbilityLines.hasOwnProperty(playerPlusOneAbilityLine)) {
-        let ability = playerPlusOneAbilityLines[playerPlusOneAbilityLine];
+        const ability = playerPlusOneAbilityLines[playerPlusOneAbilityLine];
 
         playerPlusOneAbilityColumns.push(
           <Col className="enhancement-col" key={playerPlusOneAbilityLine} xs={6} md={2}>
@@ -352,7 +338,7 @@ class EnhancementCalculatorComponent extends Component {
 
     for (let summonPlusOneAbilityLine in summonPlusOneAbilityLines) {
       if (summonPlusOneAbilityLines.hasOwnProperty(summonPlusOneAbilityLine)) {
-        let ability = summonPlusOneAbilityLines[summonPlusOneAbilityLine];
+        const ability = summonPlusOneAbilityLines[summonPlusOneAbilityLine];
 
         summonPlusOneAbilityColumns.push(
           <Col className="enhancement-col" key={summonPlusOneAbilityLine} xs={6} md={3}>
@@ -366,7 +352,7 @@ class EnhancementCalculatorComponent extends Component {
 
     return (
       <div className="container">
-      	<Grid className="enhancement-container">
+        <Grid className="enhancement-container">
           <Row className="hidden-xs">
             <Col xs={12} md={12}>
               <blockquote>
@@ -377,86 +363,86 @@ class EnhancementCalculatorComponent extends Component {
             </Col>
           </Row>
 
-          {this.makeLabelRow("Enhancement Type")}
+          {this.makeLabelRow('Enhancement Type')}
 
           <Row>
             {enhancementTypeColumns}
           </Row>
 
-          {this.state.stickerType === "playerPlus1" && 
+          {this.state.stickerType === 'playerPlus1' &&
             <div>
               <hr />
-              {this.makeLabelRow("Ability Line")}
+              {this.makeLabelRow('Ability Line')}
               <Row>
                 {playerPlusOneAbilityColumns}
               </Row>
             </div>
           }
 
-          {this.state.stickerType === "summonPlus1" && 
+          {this.state.stickerType === "summonPlus1" &&
             <div>
               <hr />
-              {this.makeLabelRow("Enhancement Effect")}
+              {this.makeLabelRow('Enhancement Effect')}
               <Row>
                 {summonPlusOneAbilityColumns}
               </Row>
             </div>
           }
 
-          {this.state.stickerType === "attackHex" && 
+          {this.state.stickerType === "attackHex" &&
             <div>
               <hr />
-              {this.makeLabelRow("Number of Hexes Currently Targeted with the Attack")}
+              {this.makeLabelRow('Number of Hexes Currently Targeted with the Attack')}
               <Row>
                 {numberOfHexesColumns}
               </Row>
             </div>
           }
 
-          {this.state.stickerType === "otherEffect" && 
+          {this.state.stickerType === 'otherEffect' &&
             <div>
               <hr />
-              {this.makeLabelRow("Base Effect")}
+              {this.makeLabelRow('Base Effect')}
               <Row>
                 {baseOtherEffectColumns}
               </Row>
             </div>
           }
 
-          {this.showOtherOptions() && 
+          {this.showOtherOptions() && (
             <div>
               <hr />
-              {this.makeLabelRow("Level of Ability Card")}
+              {this.makeLabelRow('Level of Ability Card')}
               <Row>
                 {abilityCardLevelColumns}
               </Row>
             </div>
-          }
+          )}
 
-          {this.showOtherOptions() && 
+          {this.showOtherOptions() && (
             <div>
               <hr />
-              {this.makeLabelRow("Number of Previous Enhancements to the Same Action")}
+              {this.makeLabelRow('Number of Previous Enhancements to the Same Action')}
               <Row>
                 {previousEnhancementsColumns}
               </Row>
             </div>
-          }
+            )}
 
-          {this.showOtherOptions() && this.state.stickerType !== "attackHex" &&
+          {this.showOtherOptions() && this.state.stickerType !== 'attackHex' &&
             <div>
               <hr />
-              {this.makeLabelRow("Ability has Multple Targets")}
+              {this.makeLabelRow('Ability has Multple Targets')}
               <Row>
                 <Col className="enhancement-col" xs={12} md={12}>
-                  <Button block onClick={() => this.multipleTargetClick()} className={this.state.multipleTargets && "btn-selected-light"}>{this.state.multipleTargets ? "Yes" : "No"} (Double base cost)</Button>
+                  <Button block onClick={() => this.multipleTargetClick()} className={this.state.multipleTargets && "btn-selected-light"}>{this.state.multipleTargets ? 'Yes' : 'No'} (Double base cost)</Button>
                 </Col>
               </Row>
             </div>
           }
 
           <hr />
-          {this.makeLabelRow("Enhancement Cost")}
+          {this.makeLabelRow('Enhancement Cost')}
           <Row className="cost-row">
             <Col className="enhancement-col text-center" xs={12} md={12}>
               {cost <= 0 &&
@@ -472,7 +458,7 @@ class EnhancementCalculatorComponent extends Component {
               The total number of <strong>enhanced cards</strong> in a class's ability deck must be <strong>equal to or less than</strong> the prosperity level of the town.
             </Col>
           </Row>
-      	</Grid>
+        </Grid>
       </div>
     );
   }

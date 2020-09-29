@@ -1,92 +1,91 @@
 import React, { Component } from 'react';
-import { Grid, Row, Col, Button } from 'react-bootstrap';
+import {
+  Grid, Row, Col, Button,
+} from 'react-bootstrap';
 
 const versionHistory = [
   {
-    versionNumber: "1.7",
+    versionNumber: '1.7',
     items: [
-      "added missing achievement and scenario requirement from Base game",
-      "added content (scenarios, treasures, achievements, monsters) from Forgotten Circles expansion",
-      "fixed bug with prosperity changes not being saved",
-      "refactored components, cleaned files structure",
-      "added class icons to Solo scenarios",
+      'added missing achievement and scenario requirement from Base game',
+      'added content (scenarios, treasures, achievements, monsters) from Forgotten Circles expansion',
+      'fixed bug with prosperity changes not being saved',
+      'refactored components, cleaned files structure',
+      'added class icons to Solo scenarios',
     ],
-    date: "2019/09/09"
+    date: '2019/09/09',
   },
   {
-    versionNumber: "1.6",
+    versionNumber: '1.6',
     items: [
-      "local browser storage - your game will automatically return to the previous point when used in the same web browser",
+      'local browser storage - your game will automatically return to the previous point when used in the same web browser',
     ],
-    date: "2017/10/25"
+    date: '2017/10/25',
   },
   {
-    versionNumber: "1.5",
+    versionNumber: '1.5',
     items: [
-      "many more monster health tracker updates, implementing new ways to apply and remove status tokens",
-      "fixed some menu issues by consolidating top level items"
+      'many more monster health tracker updates, implementing new ways to apply and remove status tokens',
+      'fixed some menu issues by consolidating top level items',
     ],
-    date: "2017/07/11"
+    date: '2017/07/11',
   },
   {
-    versionNumber: "1.4",
+    versionNumber: '1.4',
     items: [
-      "implemented new Dropbox load and save functionality",
+      'implemented new Dropbox load and save functionality',
     ],
-    date: "2017/07/07"
+    date: '2017/07/07',
   },
   {
-    versionNumber: "1.3",
+    versionNumber: '1.3',
     items: [
-      "added solo scenarios",
-      "monster status tokens can now be tracked in the monster health tracker",
-      "updated scenario select for monster health tracker to chooser instead of number input",
-      "added ability to select individual monster types for monster health tracker",
-      "can now designate monsters as summons/spawns for tracking loot drops",
-      "better monster sorting on monster health tracker"
+      'added solo scenarios',
+      'monster status tokens can now be tracked in the monster health tracker',
+      'updated scenario select for monster health tracker to chooser instead of number input',
+      'added ability to select individual monster types for monster health tracker',
+      'can now designate monsters as summons/spawns for tracking loot drops',
+      'better monster sorting on monster health tracker',
     ],
-    date: "2017/07/07"
+    date: '2017/07/07',
   },
   {
-    versionNumber: "1.2",
+    versionNumber: '1.2',
     items: [
-      "added Kickstarter scenarios",
-      "added Kickstarter scenario treasures",
-      "Google Analytics implemented"
+      'added Kickstarter scenarios',
+      'added Kickstarter scenario treasures',
+      'Google Analytics implemented',
     ],
-    date: "2017/06/29"
+    date: '2017/06/29',
   },
   {
-    versionNumber: "1.1",
+    versionNumber: '1.1',
     items: [
-      "added sanctuary donations tracker"
+      'added sanctuary donations tracker',
     ],
-    date: "2017/06/10"
+    date: '2017/06/10',
   },
-  { 
-    versionNumber: "1.0",
+  {
+    versionNumber: '1.0',
     items: [
-      "the app has launched!",
-      "various helper text added to guide users"
+      'the app has launched!',
+      'various helper text added to guide users',
     ],
-    date: "2017/04/26"
+    date: '2017/04/26',
   },
-  { 
-    versionNumber: "0.9",
+  {
+    versionNumber: '0.9',
     items: [
-      "basic features added",
-      "version tracking enabled"
+      'basic features added',
+      'version tracking enabled',
     ],
-    date: "2017/04/23"
+    date: '2017/04/23',
   },
 ];
 
 class HomeComponent extends Component {
-
   makeVersionHistory(version) {
-    let listItems = version.items.map((item, index) =>
-      <li key={index}>{item}</li>
-    );
+    const listItems = version.items.map((item, index) => <li key={index}>{item}</li>);
 
     return (
       <div key={version.versionNumber}>
@@ -99,9 +98,7 @@ class HomeComponent extends Component {
   }
 
   render() {
-    let appHistory = versionHistory.map((version) =>
-      this.makeVersionHistory(version)
-    );
+    const appHistory = versionHistory.map((version) => this.makeVersionHistory(version));
 
     return (
       <div className="container">
@@ -131,7 +128,7 @@ class HomeComponent extends Component {
               <Button href="/utilities/enhancementCalculator" bsSize="large" block className="btn-brute">Enhancement Calculator</Button>
             </Col>
             <Col xs={12} md={6}>
-              <Button href="/utilities/scenarioLevel" bsSize="large" block className="btn-doomstalker">Scenario Level Calculator</Button>
+              <Button href="/utilities/scenarioLevel" bsSize="large" block className="btn-unlocked">Scenario Level Calculator</Button>
             </Col>
           </Row>
           <Row>

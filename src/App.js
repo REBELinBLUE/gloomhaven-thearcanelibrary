@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Modal, Button } from 'react-bootstrap';
 import './App.css';
 import Header from './components/Header';
@@ -23,8 +23,8 @@ class App extends Component {
 
     this.state = {
       game: GameStore.getGame(),
-      error: ErrorStore.getError()
-    }
+      error: ErrorStore.getError(),
+    };
 
     this.onChange = this.onChange.bind(this);
   }
@@ -42,7 +42,7 @@ class App extends Component {
   onChange() {
     this.setState({
       game: GameStore.getGame(),
-      error: ErrorStore.getError()
+      error: ErrorStore.getError(),
     });
   }
 
@@ -54,18 +54,18 @@ class App extends Component {
     return (
       <Router>
         <div className="content">
-          <Header></Header>
+          <Header />
 
           <Route exact path="/" component={Home} />
-          <Route path="/scenarios" component={Scenarios}/>
-          <Route path="/party" component={Party}/>
-          <Route path="/utilities/scenarioLevel" component={ScenarioLevel}/>
-          <Route path="/utilities/enhancementCalculator" component={EnhancementCalculator}/>
-          <Route path="/utilities/monsterHealth" component={MonsterHealth}/>
-          <Route path="/prosperity" component={Prosperity}/>
-          <Route path="/achievements" component={Achievements}/>
-          <Route path="/unlocks" component={Unlocks}/>
-          <Route path="/characters" component={Characters}/>
+          <Route path="/scenarios" component={Scenarios} />
+          <Route path="/party" component={Party} />
+          <Route path="/utilities/scenarioLevel" component={ScenarioLevel} />
+          <Route path="/utilities/enhancementCalculator" component={EnhancementCalculator} />
+          <Route path="/utilities/monsterHealth" component={MonsterHealth} />
+          <Route path="/prosperity" component={Prosperity} />
+          <Route path="/achievements" component={Achievements} />
+          <Route path="/unlocks" component={Unlocks} />
+          <Route path="/characters" component={Characters} />
 
           <Modal id="modal" show={this.state.error != null} onHide={this.closeErrorModal}>
             <Modal.Header closeButton>
@@ -82,7 +82,7 @@ class App extends Component {
               </div>
             </Modal.Body>
             <Modal.Footer>
-              <Button className="btn-lightning" onClick={this.closeErrorModal}>Close</Button>
+              <Button className="btn-blocked" onClick={this.closeErrorModal}>Close</Button>
             </Modal.Footer>
           </Modal>
         </div>

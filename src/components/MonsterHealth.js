@@ -1,27 +1,29 @@
 import React from 'react';
 import _ from 'underscore';
-import { Grid, Row, Col, Button, ProgressBar, Modal } from 'react-bootstrap';
+import {
+  Grid, Row, Col, Button, ProgressBar, Modal,
+} from 'react-bootstrap';
 import GameComponent from './GameComponent';
-import GloomhavenIcon from '../components/utils/GloomhavenIcon';
-import {MONSTERS} from '../constants/MonsterStats';
-import {SCENARIOS, RANGES} from '../constants/Scenarios';
+import GloomhavenIcon from './utils/GloomhavenIcon';
+import { STATS } from '../constants/MonsterStats';
+import { SCENARIOS, RANGES } from '../constants/Scenarios';
 
-const iconWidth = "30px";
-const iconWidthSmall = "18px";
+const iconWidth = '30px';
+const iconWidthSmall = '18px';
 
 class MonsterHealthComponent extends GameComponent {
   constructor() {
     super();
 
-   // monsterHealth is already present in the state.
-   Object.assign(this.state, {
-      displayMonsterType: "ACTIVE",
-      statusTokenPopup: "",
+    // monsterHealth is already present in the state.
+    Object.assign(this.state, {
+      displayMonsterType: 'ACTIVE',
+      statusTokenPopup: '',
       statusTokensEnabled: [],
       healAmount: 2,
       endMonsterRoundToggled: false,
       healToggled: false,
-      clearAllStatusEffectsToggled: false
+      clearAllStatusEffectsToggled: false,
     });
 
     this.scenarioGo = this.scenarioGo.bind(this);
@@ -41,13 +43,11 @@ class MonsterHealthComponent extends GameComponent {
     let activeMonsterList = [];
 
     // cycle through all the monsters of all different types, looking for the ones that are active
-    for (let monsterNameProperty in this.state.monsterHealth.monsters) {
+    for (const monsterNameProperty in this.state.monsterHealth.monsters) {
       if (this.state.monsterHealth.monsters.hasOwnProperty(monsterNameProperty)) {
-        let monsterRecords = this.state.monsterHealth.monsters[monsterNameProperty];
+        const monsterRecords = this.state.monsterHealth.monsters[monsterNameProperty];
 
-        let activeMonsterRecords = monsterRecords.filter(function(currentValue, index) {
-          return currentValue.alive;
-        });
+        const activeMonsterRecords = monsterRecords.filter((currentValue, index) => currentValue.alive);
 
         activeMonsterList = activeMonsterList.concat(activeMonsterRecords);
       }
@@ -57,7 +57,7 @@ class MonsterHealthComponent extends GameComponent {
   }
 
   getMonsterType(monsterName) {
-    return MONSTERS.monsters[monsterName];
+    return STATS[monsterName];
   }
 
   getMonsterLevelStats(monster) {
@@ -65,37 +65,36 @@ class MonsterHealthComponent extends GameComponent {
   }
 
   makeMonsterToggleButton(monsterToDisplay) {
-    let buttonClass = "btn-monster-dead";
+    let buttonClass = 'btn-monster-dead';
     if (monsterToDisplay.alive) {
       if (monsterToDisplay.elite) {
-        buttonClass = "btn-monster-elite";
-      }
-      else {
-        buttonClass = "btn-monster-normal";
+        buttonClass = 'btn-monster-elite';
+      } else {
+        buttonClass = 'btn-monster-normal';
       }
 
       if (monsterToDisplay.summon) {
-        buttonClass += " btn-monster-summon";
+        buttonClass += ' btn-monster-summon';
       }
     }
 
-    buttonClass += " btn-monster";
+    buttonClass += ' btn-monster';
 
-    let monsterStatusTokens = [];
+    const monsterStatusTokens = [];
 
     if (!monsterToDisplay.statusTokens) {
       monsterToDisplay.statusTokens = [];
     }
 
-    for (let i=0; i<monsterToDisplay.statusTokens.length; i++) {
-      let statusToken = monsterToDisplay.statusTokens[i];
+    for (let i = 0; i < monsterToDisplay.statusTokens.length; i++) {
+      const statusToken = monsterToDisplay.statusTokens[i];
 
       monsterStatusTokens.push(
-        <GloomhavenIcon key={i} icon={statusToken} width={iconWidthSmall} />
+        <GloomhavenIcon key={i} icon={statusToken} width={iconWidthSmall} />,
       );
     }
 
-    let buttonText = monsterToDisplay.name + ' ' + monsterToDisplay.number;
+    let buttonText = `${monsterToDisplay.name} ${monsterToDisplay.number}`;
     if (monsterToDisplay.summon && monsterToDisplay.alive) {
       buttonText += '*';
     }
@@ -109,33 +108,31 @@ class MonsterHealthComponent extends GameComponent {
 
   makeMonsterKillButton(monsterToDisplay) {
     return (
-      <Button disabled={!monsterToDisplay.alive} block onClick={() => this.showConfirmKillMonster(monsterToDisplay)} className={"btn-lightning" + (!monsterToDisplay.alive ? " btn-disabled" : "")}>Kill Monster</Button>
+      <Button disabled={!monsterToDisplay.alive} block onClick={() => this.showConfirmKillMonster(monsterToDisplay)} className={`btn-blocked${!monsterToDisplay.alive ? ' btn-disabled' : ''}`}>Kill Monster</Button>
     );
   }
 
   calculateBossHealth(healthString, scenarioLevel, numPlaying) {
     let health = 0;
 
-    let healthParts = healthString.split("x");
+    const healthParts = healthString.split('x');
 
-    for (let i=0; i<healthParts.length; i++) {
+    for (let i = 0; i < healthParts.length; i++) {
       let healthPart = healthParts[i];
 
       // translate this part of the health string to a number
-      if (healthPart === "C") {
+      if (healthPart === 'C') {
         // number of characters
         healthPart = numPlaying;
-      }
-      else if (healthPart === "L") {
+      } else if (healthPart === 'L') {
         // scenario level
         healthPart = scenarioLevel;
       }
 
       if (health <= 0) {
         // this is the first number we're adding to the calculation
-        health = healthPart
-      }
-      else {
+        health = healthPart;
+      } else {
         // multiple this number by the previous health number
         health *= healthPart;
       }
@@ -145,22 +142,18 @@ class MonsterHealthComponent extends GameComponent {
   }
 
   makeMonsterHealthProgressBar(monsterToDisplay) {
-    let monsterHealth = this.state.monsterHealth;
-    let monsterType = this.getMonsterType(monsterToDisplay.name);
-    let monsterLevelStats = this.getMonsterLevelStats(monsterToDisplay);
+    const { monsterHealth } = this.state;
+    const monsterType = this.getMonsterType(monsterToDisplay.name);
+    const monsterLevelStats = this.getMonsterLevelStats(monsterToDisplay);
 
     let maxHealth = 0;
 
     if (monsterType.isBoss) {
       maxHealth = this.calculateBossHealth(monsterLevelStats.health, monsterToDisplay.level, monsterHealth.defaultNumPlaying);
-    }
-    else {
-      if (monsterToDisplay.elite) {
-        maxHealth = monsterLevelStats.elite.health;
-      }
-      else {
-        maxHealth = monsterLevelStats.normal.health;
-      }
+    } else if (monsterToDisplay.elite) {
+      maxHealth = monsterLevelStats.elite.health;
+    } else {
+      maxHealth = monsterLevelStats.normal.health;
     }
 
     let healthNow = maxHealth - monsterToDisplay.damage;
@@ -174,18 +167,18 @@ class MonsterHealthComponent extends GameComponent {
   }
 
   makeMonsterDamageHealButton(monsterToDisplay, isHeal) {
-    let text = "-";
+    let text = '-';
     let damageAmount = 1;
-    let buttonClass = "btn-doomstalker";
+    let buttonClass = 'btn-unlocked';
 
     if (isHeal) {
-      text = "+";
+      text = '+';
       damageAmount = -1;
-      buttonClass = "btn-brute";
+      buttonClass = 'btn-brute';
     }
 
     if (!monsterToDisplay.alive) {
-      buttonClass += " btn-disabled"
+      buttonClass += ' btn-disabled';
     }
 
     return (
@@ -195,21 +188,21 @@ class MonsterHealthComponent extends GameComponent {
 
   makeMonsterScenarioLevelButton(monsterToDisplay) {
     return (
-      <Button disabled={!monsterToDisplay.alive} onClick={() => this.changeMonsterScenarioLevel(monsterToDisplay)} className={(!monsterToDisplay.alive ? " btn-disabled" : "")} block>{monsterToDisplay.level}</Button>
+      <Button disabled={!monsterToDisplay.alive} onClick={() => this.changeMonsterScenarioLevel(monsterToDisplay)} className={(!monsterToDisplay.alive ? ' btn-disabled' : '')} block>{monsterToDisplay.level}</Button>
     );
   }
 
   makeDisplayedMonsterSection(monsterToDisplay) {
-    let key = monsterToDisplay.name + monsterToDisplay.number;
+    const key = monsterToDisplay.name + monsterToDisplay.number;
 
-    let monsterToggleButton = this.makeMonsterToggleButton(monsterToDisplay);
-    let monsterKillButton = this.makeMonsterKillButton(monsterToDisplay);
-    let monsterHealthProgressBar = this.makeMonsterHealthProgressBar(monsterToDisplay);
-    let monsterTakeDamageButton = this.makeMonsterDamageHealButton(monsterToDisplay, false);
-    let monsterHealButton = this.makeMonsterDamageHealButton(monsterToDisplay, true);
-    let monsterLevelButton = this.makeMonsterScenarioLevelButton(monsterToDisplay);
+    const monsterToggleButton = this.makeMonsterToggleButton(monsterToDisplay);
+    const monsterKillButton = this.makeMonsterKillButton(monsterToDisplay);
+    const monsterHealthProgressBar = this.makeMonsterHealthProgressBar(monsterToDisplay);
+    const monsterTakeDamageButton = this.makeMonsterDamageHealButton(monsterToDisplay, false);
+    const monsterHealButton = this.makeMonsterDamageHealButton(monsterToDisplay, true);
+    const monsterLevelButton = this.makeMonsterScenarioLevelButton(monsterToDisplay);
 
-    return(
+    return (
       <Col xs={12} md={6} key={key} className="monster-health-col">
         <Row>
           <Col xs={8} className="wide-right">
@@ -235,36 +228,35 @@ class MonsterHealthComponent extends GameComponent {
   }
 
   isDisplayActiveOnly() {
-    return this.state.displayMonsterType === "ACTIVE";
+    return this.state.displayMonsterType === 'ACTIVE';
   }
 
   makeDisplayedMonsterSections() {
     let displayedMonstersData = [];
-    let displayedMonstersHTML = [];
+    const displayedMonstersHTML = [];
 
     // find which monsters to display
     if (this.isDisplayActiveOnly()) {
       displayedMonstersData = this.getAllActiveMonsters();
-    }
-    else {
+    } else {
       displayedMonstersData = this.state.monsterHealth.monsters[this.state.displayMonsterType];
     }
 
     // ensure that monsters are sorted alphabetically by name and then by their number
     if (displayedMonstersData) {
-      displayedMonstersData.sort(function(a, b) {
-        let aName = a.name.toLowerCase();
-        let bName = b.name.toLowerCase();
+      displayedMonstersData.sort((a, b) => {
+        const aName = a.name.toLowerCase();
+        const bName = b.name.toLowerCase();
 
-        if (aName < bName) {return -1;}
-        if (aName > bName) {return 1;}
-        if (a.number < b.number) {return -1;}
-        if (a.number > b.number) {return 1;}
+        if (aName < bName) { return -1; }
+        if (aName > bName) { return 1; }
+        if (a.number < b.number) { return -1; }
+        if (a.number > b.number) { return 1; }
         return 0;
       });
 
-      for (let i=0; i<displayedMonstersData.length; i++) {
-        let monsterToDisplay = displayedMonstersData[i];
+      for (let i = 0; i < displayedMonstersData.length; i++) {
+        const monsterToDisplay = displayedMonstersData[i];
 
         displayedMonstersHTML.push(this.makeDisplayedMonsterSection(monsterToDisplay));
       }
@@ -279,7 +271,7 @@ class MonsterHealthComponent extends GameComponent {
 
   scenarioGo() {
     this.setStateAndUpdateGame((state) => {
-      let monsterHealthCopy = Object.assign({}, state.monsterHealth);
+      const monsterHealthCopy = { ...state.monsterHealth };
 
       // first clear all existing monsters
       monsterHealthCopy.monsters = {};
@@ -288,24 +280,24 @@ class MonsterHealthComponent extends GameComponent {
       const decks = this.getScenarioMonsters(monsterHealthCopy.scenario);
       const monsterNames = _.pluck(decks, 'name');
 
-      monsterNames.sort(function(a, b) {
-        let aName = a.toLowerCase();
-        let bName = b.toLowerCase();
+      monsterNames.sort((a, b) => {
+        const aName = a.toLowerCase();
+        const bName = b.toLowerCase();
 
-        if (aName < bName) {return -1;}
-        if (aName > bName) {return 1;}
+        if (aName < bName) { return -1; }
+        if (aName > bName) { return 1; }
         return 0;
       });
 
-      for (let i=0; i<monsterNames.length; i++) {
-        let monsterName = monsterNames[i];
+      for (let i = 0; i < monsterNames.length; i++) {
+        const monsterName = monsterNames[i];
 
         // find the monsters stats in the data structure
-        let monsterType = this.getMonsterType(monsterName);
+        const monsterType = this.getMonsterType(monsterName);
 
-        let monsters = [];
+        const monsters = [];
 
-        for (let j=0; j<monsterType.standeeCount; j++) {
+        for (let j = 0; j < monsterType.standeeCount; j++) {
           // add a monster record to the data structure
           monsters.push({
             name: monsterName,
@@ -314,7 +306,7 @@ class MonsterHealthComponent extends GameComponent {
             level: monsterHealthCopy.defaultScenarioLevel,
             alive: false,
             damage: 0,
-            statusTokens: []
+            statusTokens: [],
           });
         }
 
@@ -323,7 +315,7 @@ class MonsterHealthComponent extends GameComponent {
 
       return {
         monsterHealth: monsterHealthCopy,
-        displayMonsterType: "ACTIVE"
+        displayMonsterType: 'ACTIVE',
       };
     });
   }
@@ -331,35 +323,35 @@ class MonsterHealthComponent extends GameComponent {
   createMonsterHeaderButton(monsterName) {
     return (
       <Col xs={12} md={3} key={monsterName}>
-        <Button onClick={() => this.showMonsters(monsterName)} className="btn-lightning" block>{monsterName}</Button>
+        <Button onClick={() => this.showMonsters(monsterName)} className="btn-blocked" block>{monsterName}</Button>
       </Col>
     );
   }
 
   createMonsterHeaderActiveButton() {
     return (
-      <Col xs={12} md={3} key={"active"}>
-        <Button onClick={() => this.showActiveMonsters()} className="btn-scoundrel" block>All Active</Button>
+      <Col xs={12} md={3} key="active">
+        <Button onClick={() => this.showActiveMonsters()} className="btn-completed" block>All Active</Button>
       </Col>
     );
   }
 
   showActiveMonsters() {
     this.setState({
-      displayMonsterType: "ACTIVE"
+      displayMonsterType: 'ACTIVE',
     });
   }
 
   showMonsters(monsterName) {
     this.setState({
-      displayMonsterType: monsterName
+      displayMonsterType: monsterName,
     });
   }
 
   createScenarioLevelButton(value, activeValue) {
     return (
       <Col xs={1} md={1} key={value}>
-        <Button onClick={() => this.levelButtonClick(value)} className={activeValue === value ? "btn-doomstalker" : ""} block>{value}</Button>
+        <Button onClick={() => this.levelButtonClick(value)} className={activeValue === value ? 'btn-unlocked' : ''} block>{value}</Button>
       </Col>
     );
   }
@@ -367,18 +359,18 @@ class MonsterHealthComponent extends GameComponent {
   createNumCharactersButton(value, activeValue) {
     return (
       <Col xs={3} key={value}>
-        <Button onClick={() => this.numCharactersButtonClick(value)} className={activeValue === value ? "btn-doomstalker" : ""} block>{value}</Button>
+        <Button onClick={() => this.numCharactersButtonClick(value)} className={activeValue === value ? 'btn-unlocked' : ''} block>{value}</Button>
       </Col>
     );
   }
 
   setMonsterHealthState(mutator) {
     this.setStateAndUpdateGame((state) => {
-      let monsterHealthCopy = Object.assign({}, state.monsterHealth);
+      const monsterHealthCopy = { ...state.monsterHealth };
       mutator(monsterHealthCopy);
       return {
-        monsterHealth: monsterHealthCopy
-      }
+        monsterHealth: monsterHealthCopy,
+      };
     });
   }
 
@@ -411,8 +403,8 @@ class MonsterHealthComponent extends GameComponent {
 
   healMonster(monster) {
     this.setMonsterHealthState((monsterHealth) => {
-      let poisonIndex = monster.statusTokens.indexOf("statusEffectPoison");
-      let woundIndex = monster.statusTokens.indexOf("statusEffectWound");
+      const poisonIndex = monster.statusTokens.indexOf('statusEffectPoison');
+      const woundIndex = monster.statusTokens.indexOf('statusEffectWound');
       let healDamage = true;
       if (poisonIndex > -1) {
         // poison blocks heal
@@ -437,27 +429,22 @@ class MonsterHealthComponent extends GameComponent {
   }
 
   changeMonsterDamageInternal(monster, damageAmount) {
-    let monsterLevelStats = this.getMonsterLevelStats(monster);
-    let monsterType = this.getMonsterType(monster.name);
+    const monsterLevelStats = this.getMonsterLevelStats(monster);
+    const monsterType = this.getMonsterType(monster.name);
     let damage = monster.damage + damageAmount;
 
     let health = 0;
     if (monsterType.isBoss) {
       health = monsterLevelStats.health;
-    }
-    else {
-      if (monster.elite) {
-        health = monsterLevelStats.elite.health;
-      }
-      else {
-        health = monsterLevelStats.normal.health;
-      }
+    } else if (monster.elite) {
+      health = monsterLevelStats.elite.health;
+    } else {
+      health = monsterLevelStats.normal.health;
     }
 
     if (damage >= health) {
       damage = health;
-    }
-    else if (damage < 0) {
+    } else if (damage < 0) {
       damage = 0;
     }
 
@@ -469,19 +456,18 @@ class MonsterHealthComponent extends GameComponent {
       statusTokensEnabled: [],
       healToggled: false,
       endMonsterRoundToggled: false,
-      clearAllStatusEffectsToggled: false
+      clearAllStatusEffectsToggled: false,
     });
   }
 
   toggleStatusEffect(statusEffect) {
-    let enabled = this.state.statusTokensEnabled;
-    let tokenIndex = enabled.indexOf(statusEffect);
+    const enabled = this.state.statusTokensEnabled;
+    const tokenIndex = enabled.indexOf(statusEffect);
 
     if (tokenIndex > -1) {
       // turn it off
       enabled.splice(tokenIndex, 1);
-    }
-    else {
+    } else {
       // turn it on
       enabled.push(statusEffect);
     }
@@ -490,7 +476,7 @@ class MonsterHealthComponent extends GameComponent {
       statusTokensEnabled: enabled,
       healToggled: false,
       endMonsterRoundToggled: false,
-      clearAllStatusEffectsToggled: false
+      clearAllStatusEffectsToggled: false,
     });
   }
 
@@ -507,12 +493,11 @@ class MonsterHealthComponent extends GameComponent {
         monster.statusTokens = [];
       }
 
-      let index = monster.statusTokens.indexOf(statusToken);
+      const index = monster.statusTokens.indexOf(statusToken);
       if (index >= 0) {
         // remove this status token from monster
         monster.statusTokens.splice(index, 1);
-      }
-      else {
+      } else {
         // add this status token to monster
         monster.statusTokens.push(statusToken);
       }
@@ -521,55 +506,50 @@ class MonsterHealthComponent extends GameComponent {
 
   endRoundForMonster(monster) {
     this.setMonsterHealthState((monsterHealth) => {
-      let poisoned = monster.statusTokens.indexOf("statusEffectPoison") > -1;
-      let wounded = monster.statusTokens.indexOf("statusEffectWound") > -1;
+      const poisoned = monster.statusTokens.indexOf('statusEffectPoison') > -1;
+      const wounded = monster.statusTokens.indexOf('statusEffectWound') > -1;
 
       // remove everything except poison and wound
       monster.statusTokens = [];
 
       if (poisoned) {
-        monster.statusTokens.push("statusEffectPoison");
+        monster.statusTokens.push('statusEffectPoison');
       }
 
       if (wounded) {
-        monster.statusTokens.push("statusEffectWound");
+        monster.statusTokens.push('statusEffectWound');
       }
     });
   }
 
   toggleMonster(monster) {
-    let monsterType = this.getMonsterType(monster.name);
+    const monsterType = this.getMonsterType(monster.name);
 
     if (this.isDisplayActiveOnly()) {
       // we're display all active monsters
 
       if (this.state.statusTokensEnabled.length > 0) {
         // toggle the selected status effects for this particular monster
-        for (let i=0; i<this.state.statusTokensEnabled.length; i++) {
-          let effect = this.state.statusTokensEnabled[i];
+        for (let i = 0; i < this.state.statusTokensEnabled.length; i++) {
+          const effect = this.state.statusTokensEnabled[i];
 
           this.toggleStatusToken(effect, monster);
         }
-      }
-      else if (this.state.healToggled) {
+      } else if (this.state.healToggled) {
         this.healMonster(monster);
-      }
-      else if (this.state.endMonsterRoundToggled) {
+      } else if (this.state.endMonsterRoundToggled) {
         this.endRoundForMonster(monster);
-      }
-      else if (this.state.clearAllStatusEffectsToggled) {
+      } else if (this.state.clearAllStatusEffectsToggled) {
         this.clearAllStatusEffectsForMonster(monster);
-      }
-      else {
+      } else {
         // show the popup for status effects
         this.setState({
-          statusTokenPopup: monster
+          statusTokenPopup: monster,
         });
       }
 
-      return; // don't carry on and update game state in this method - it was already done in one of the methods called
-    }
-    else {
+      // don't carry on and update game state in this method - it was already done in one of the methods called
+    } else {
       // if we're displaying only monsters of a particular type, then this button toggles between normal/elite/summon/dead
       this.setMonsterHealthState((monsterHealth) => {
         if (monsterType.isBoss) {
@@ -578,34 +558,28 @@ class MonsterHealthComponent extends GameComponent {
           if (!monster.alive) {
             // dead -> alive (normal)
             monster.alive = true;
-          }
-          else {
+          } else {
             // alive (normal) -> dead
             monster.alive = false;
           }
-        }
-        else {
+        } else {
           // regular monster: dead -> alive (normal) -> alive (elite) -> alive (normal, summon) -> alive (elite, summon) -> dead -> ...
 
           if (!monster.alive) {
             // dead -> alive (normal)
             monster.alive = true;
             monster.elite = false;
-          }
-          else if (!monster.elite && !monster.summon) {
+          } else if (!monster.elite && !monster.summon) {
             // alive (normal) -> alive (elite)
             monster.elite = true;
-          }
-          else if (monster.elite && !monster.summon) {
+          } else if (monster.elite && !monster.summon) {
             // alive (elite) -> alive (normal, summon)
             monster.elite = false;
             monster.summon = true;
-          }
-          else if (!monster.elite && monster.summon) {
+          } else if (!monster.elite && monster.summon) {
             // alive (normal, summon) -> alive (elite, summon)
             monster.elite = true;
-          }
-          else {
+          } else {
             // alive (elite, summon) -> dead
             monster.alive = false;
             monster.elite = false;
@@ -619,28 +593,28 @@ class MonsterHealthComponent extends GameComponent {
 
   closeStatusTokenPopup() {
     this.setState({
-      statusTokenPopup: ""
+      statusTokenPopup: '',
     });
   }
 
   makeStatusTokenButtons() {
-    let buttons = [];
+    const buttons = [];
 
-    if (this.state.statusTokenPopup === "") {
+    if (this.state.statusTokenPopup === '') {
       return buttons;
     }
 
-    let statusTokens = ["statusEffectStun", "statusEffectDisarm", "statusEffectImmobilize", "statusEffectPoison", "statusEffectWound", "statusEffectMuddle", "statusEffectStrengthen", "statusEffectInvisible"];
+    const statusTokens = ['statusEffectStun', 'statusEffectDisarm', 'statusEffectImmobilize', 'statusEffectPoison', 'statusEffectWound', 'statusEffectMuddle', 'statusEffectStrengthen', 'statusEffectInvisible'];
 
-    for (let i=0; i< statusTokens.length; i++) {
-      let statusToken = statusTokens[i];
+    for (let i = 0; i < statusTokens.length; i++) {
+      const statusToken = statusTokens[i];
 
       buttons.push(
         <Col key={i} xs={4} md={3}>
-          <Button block onClick={() => this.toggleStatusToken(statusToken, this.state.statusTokenPopup)} className={this.state.statusTokenPopup.statusTokens && this.state.statusTokenPopup.statusTokens.indexOf(statusToken) >= 0 ? "btn-doomstalker" : ""}>
+          <Button block onClick={() => this.toggleStatusToken(statusToken, this.state.statusTokenPopup)} className={this.state.statusTokenPopup.statusTokens && this.state.statusTokenPopup.statusTokens.indexOf(statusToken) >= 0 ? 'btn-unlocked' : ''}>
             <GloomhavenIcon icon={statusToken} width={iconWidth} />
           </Button>
-        </Col>
+        </Col>,
       );
     }
 
@@ -648,19 +622,19 @@ class MonsterHealthComponent extends GameComponent {
   }
 
   makeStatusEffectToggles() {
-    let buttons = [];
+    const buttons = [];
 
-    let statusTokens = ["statusEffectStun", "statusEffectDisarm", "statusEffectImmobilize", "statusEffectPoison", "statusEffectWound", "statusEffectMuddle", "statusEffectStrengthen", "statusEffectInvisible"];
+    const statusTokens = ['statusEffectStun', 'statusEffectDisarm', 'statusEffectImmobilize', 'statusEffectPoison', 'statusEffectWound', 'statusEffectMuddle', 'statusEffectStrengthen', 'statusEffectInvisible'];
 
-    for (let i=0; i< statusTokens.length; i++) {
-      let statusToken = statusTokens[i];
+    for (let i = 0; i < statusTokens.length; i++) {
+      const statusToken = statusTokens[i];
 
       buttons.push(
         <Col key={i} xs={3} md={1}>
-          <Button block onClick={() => this.toggleStatusEffect(statusToken)} className={this.state.statusTokensEnabled && this.state.statusTokensEnabled.indexOf(statusToken) >= 0 ? "btn-doomstalker" : ""}>
+          <Button block onClick={() => this.toggleStatusEffect(statusToken)} className={this.state.statusTokensEnabled && this.state.statusTokensEnabled.indexOf(statusToken) >= 0 ? 'btn-unlocked' : ''}>
             <GloomhavenIcon icon={statusToken} width={iconWidth} />
           </Button>
-        </Col>
+        </Col>,
       );
     }
 
@@ -669,38 +643,37 @@ class MonsterHealthComponent extends GameComponent {
 
   showScenarioChooser() {
     this.setState({
-      showScenarioChooser: true
+      showScenarioChooser: true,
     });
   }
 
   showMonsterChooser() {
     this.setState({
-      showMonsterChooser: true
+      showMonsterChooser: true,
     });
   }
 
   closeScenarioChooser() {
     this.setState({
-      showScenarioChooser: false
+      showScenarioChooser: false,
     });
   }
 
   closeConfirmKillMonster() {
     this.setState({
-      confirmKillMonster: null
+      confirmKillMonster: null,
     });
   }
 
-
   showConfirmKillMonster(monster) {
     this.setState({
-      confirmKillMonster: monster
+      confirmKillMonster: monster,
     });
   }
 
   closeMonsterChooser() {
     this.setState({
-      showMonsterChooser: false
+      showMonsterChooser: false,
     });
   }
 
@@ -716,28 +689,28 @@ class MonsterHealthComponent extends GameComponent {
   }
 
   makeScenarioChooserButton(buttonText, scenarioNumber) {
-    return(
+    return (
       <Col xs={2} key={scenarioNumber}>
-        <Button block className="btn-doomstalker btn-scenario-chooser" onClick={() => this.chooseScenario(scenarioNumber)}>{buttonText}</Button>
+        <Button block className="btn-unlocked btn-scenario-chooser" onClick={() => this.chooseScenario(scenarioNumber)}>{buttonText}</Button>
       </Col>
     );
   }
 
   makeMonsterChooserButtons() {
-    let buttons = [];
+    const buttons = [];
 
-    for (let monsterName in MONSTERS.monsters) {
-      if (MONSTERS.monsters.hasOwnProperty(monsterName)) {
+    for (const monsterName in STATS) {
+      if (STATS.hasOwnProperty(monsterName)) {
         buttons.push(this.makeMonsterChooserButton(monsterName));
       }
     }
 
-    buttons.sort(function(a, b) {
-      let aKey = a.key.toLowerCase();
-      let bKey = b.key.toLowerCase();
+    buttons.sort((a, b) => {
+      const aKey = a.key.toLowerCase();
+      const bKey = b.key.toLowerCase();
 
-      if (aKey < bKey) {return -1;}
-      if (aKey > bKey) {return 1;}
+      if (aKey < bKey) { return -1; }
+      if (aKey > bKey) { return 1; }
       return 0;
     });
 
@@ -746,14 +719,14 @@ class MonsterHealthComponent extends GameComponent {
 
   makeMonsterChooserButton(monsterName) {
     // is this monster already selected?
-    let selected = this.state.monsterHealth.monsters[monsterName];
+    const selected = this.state.monsterHealth.monsters[monsterName];
 
-    let buttonClass = "btn-scenario-chooser";
+    let buttonClass = 'btn-scenario-chooser';
     if (selected) {
-      buttonClass += " btn-doomstalker";
+      buttonClass += ' btn-unlocked';
     }
 
-    return(
+    return (
       <Col key={monsterName} xs={6}>
         <Button block className={buttonClass} onClick={() => this.toggleChooseMonster(monsterName)}>{monsterName}</Button>
       </Col>
@@ -763,17 +736,16 @@ class MonsterHealthComponent extends GameComponent {
   toggleChooseMonster(monsterName) {
     this.setMonsterHealthState((monsterHealth) => {
       // find the monsters stats in the data structure
-      let monsterType = this.getMonsterType(monsterName);
+      const monsterType = this.getMonsterType(monsterName);
 
       if (monsterHealth.monsters[monsterName]) {
         // we already have this monster - remove it
         delete monsterHealth.monsters[monsterName];
-      }
-      else {
+      } else {
         // add this monster to the available types
-        let monsters = [];
+        const monsters = [];
 
-        for (let j=0; j<monsterType.standeeCount; j++) {
+        for (let j = 0; j < monsterType.standeeCount; j++) {
           // add a monster record to the data structure
           monsters.push({
             name: monsterName,
@@ -782,7 +754,7 @@ class MonsterHealthComponent extends GameComponent {
             level: monsterHealth.defaultScenarioLevel,
             alive: false,
             damage: 0,
-            statusTokens: []
+            statusTokens: [],
           });
         }
 
@@ -803,7 +775,7 @@ class MonsterHealthComponent extends GameComponent {
   }
 
   isMonstersChosen() {
-    for (let monster in this.state.monsterHealth.monsters) {
+    for (const monster in this.state.monsterHealth.monsters) {
       if (this.state.monsterHealth.monsters.hasOwnProperty(monster)) {
         return true;
       }
@@ -818,79 +790,75 @@ class MonsterHealthComponent extends GameComponent {
     }
 
     this.setState({
-      healAmount: newAmount
+      healAmount: newAmount,
     });
   }
 
   toggleHeal() {
-    let healToggled = !this.state.healToggled;
+    const healToggled = !this.state.healToggled;
 
     this.setState({
-      healToggled: healToggled,
+      healToggled,
       endMonsterRoundToggled: false,
       clearAllStatusEffectsToggled: false,
-      statusTokensEnabled: []
+      statusTokensEnabled: [],
     });
   }
 
   toggleClearAllStatusEffects() {
-    let clearAllStatusEffectsToggled = !this.state.clearAllStatusEffectsToggled;
+    const clearAllStatusEffectsToggled = !this.state.clearAllStatusEffectsToggled;
 
     this.setState({
       healToggled: false,
       endMonsterRoundToggled: false,
-      clearAllStatusEffectsToggled: clearAllStatusEffectsToggled,
-      statusTokensEnabled: []
+      clearAllStatusEffectsToggled,
+      statusTokensEnabled: [],
     });
   }
 
   toggleEndOfMonsterRound() {
-    let endMonsterRoundToggled = !this.state.endMonsterRoundToggled;
+    const endMonsterRoundToggled = !this.state.endMonsterRoundToggled;
 
     this.setState({
       healToggled: false,
-      endMonsterRoundToggled: endMonsterRoundToggled,
+      endMonsterRoundToggled,
       clearAllStatusEffectsToggled: false,
-      statusTokensEnabled: []
+      statusTokensEnabled: [],
     });
   }
 
   render() {
-    let scenarioLevelButtons = [];
+    const scenarioLevelButtons = [];
 
-    for (let i=0; i<=7; i++) {
+    for (let i = 0; i <= 7; i++) {
       scenarioLevelButtons.push(this.createScenarioLevelButton(i, this.state.monsterHealth.defaultScenarioLevel));
     }
 
-    let numCharactersButtons = [];
+    const numCharactersButtons = [];
 
-    for (let i=2; i<=4; i++) {
-        numCharactersButtons.push(this.createNumCharactersButton(i, this.state.monsterHealth.defaultNumPlaying));
+    for (let i = 2; i <= 4; i++) {
+      numCharactersButtons.push(this.createNumCharactersButton(i, this.state.monsterHealth.defaultNumPlaying));
     }
 
-    let monsterHeaderButtons = [];
+    const monsterHeaderButtons = [];
 
-    for (let monsterNameProperty in this.state.monsterHealth.monsters) {
+    for (const monsterNameProperty in this.state.monsterHealth.monsters) {
       if (this.state.monsterHealth.monsters.hasOwnProperty(monsterNameProperty)) {
-          monsterHeaderButtons.push(this.createMonsterHeaderButton(monsterNameProperty));
+        monsterHeaderButtons.push(this.createMonsterHeaderButton(monsterNameProperty));
       }
     }
 
     monsterHeaderButtons.push(this.createMonsterHeaderActiveButton());
 
-    let displayedMonsterSections = this.makeDisplayedMonsterSections();
-
-    let statusTokenButtons = this.makeStatusTokenButtons();
-
-    let scenarioChooserButtonsSections = this.makeScenarioChooserButtons();
-
-    let monsterChooserButtons = this.makeMonsterChooserButtons();
-
-    let statusEffectToggles = this.makeStatusEffectToggles();
+    const displayedMonsterSections = this.makeDisplayedMonsterSections();
+    const statusTokenButtons = this.makeStatusTokenButtons();
+    const scenarioChooserButtonsSections = this.makeScenarioChooserButtons();
+    const monsterChooserButtons = this.makeMonsterChooserButtons();
+    const statusEffectToggles = this.makeStatusEffectToggles();
 
     return (
       <div className="container monster-health-container">
-        <Modal id="modal" show={this.state.statusTokenPopup !== ""} onHide={() => this.closeStatusTokenPopup()}>
+        <Modal id="modal" show={this.state.statusTokenPopup !== ''} onHide={() => this.closeStatusTokenPopup()}>
           <Modal.Header closeButton>
             <Modal.Title>Status Effects for {this.state.statusTokenPopup.name} {this.state.statusTokenPopup.number}</Modal.Title>
           </Modal.Header>
@@ -900,7 +868,7 @@ class MonsterHealthComponent extends GameComponent {
             </Row>
           </Modal.Body>
           <Modal.Footer>
-            <Button className="btn-lightning" onClick={() => this.closeStatusTokenPopup()}>Close</Button>
+            <Button className="btn-blocked" onClick={() => this.closeStatusTokenPopup()}>Close</Button>
           </Modal.Footer>
         </Modal>
 
@@ -914,11 +882,11 @@ class MonsterHealthComponent extends GameComponent {
                 <span>Warning: selecting a new scenario will wipe all unsaved existing monster health data.</span>
               </Col>
             </Row>
-            <hr/>
+            <hr />
             {scenarioChooserButtonsSections}
           </Modal.Body>
           <Modal.Footer>
-            <Button className="btn-lightning" onClick={() => this.closeScenarioChooser()}>Close</Button>
+            <Button className="btn-blocked" onClick={() => this.closeScenarioChooser()}>Close</Button>
           </Modal.Footer>
         </Modal>
 
@@ -932,13 +900,13 @@ class MonsterHealthComponent extends GameComponent {
                 <span>Warning: unselecting any monster type will wipe all unsaved existing monster health data for that monster.</span>
               </Col>
             </Row>
-            <hr/>
+            <hr />
             <Row>
               {monsterChooserButtons}
             </Row>
           </Modal.Body>
           <Modal.Footer>
-            <Button className="btn-lightning" onClick={() => this.closeMonsterChooser()}>Close</Button>
+            <Button className="btn-blocked" onClick={() => this.closeMonsterChooser()}>Close</Button>
           </Modal.Footer>
         </Modal>
 
@@ -954,19 +922,19 @@ class MonsterHealthComponent extends GameComponent {
             </Row>
             <Row>
               <Col xs={6}>
-                <Button block className="btn-scoundrel" onClick={() => this.killMonster(this.state.confirmKillMonster)}>Kill</Button>
+                <Button block className="btn-completed" onClick={() => this.killMonster(this.state.confirmKillMonster)}>Kill</Button>
               </Col>
               <Col xs={6}>
-                <Button block className="btn-lightning" onClick={() => this.closeConfirmKillMonster()}>Cancel</Button>
+                <Button block className="btn-blocked" onClick={() => this.closeConfirmKillMonster()}>Cancel</Button>
               </Col>
             </Row>
           </Modal.Body>
           <Modal.Footer>
-            {/*<Button className="btn-lightning" onClick={() => this.closeConfirmKillMonster()}>Close</Button>*/}
+            {/* <Button className="btn-blocked" onClick={() => this.closeConfirmKillMonster()}>Close</Button> */}
           </Modal.Footer>
         </Modal>
 
-      	<Grid>
+        <Grid>
           <Row className="monster-health-row">
             <Col xs={12} md={7}>
               <Row>
@@ -985,49 +953,53 @@ class MonsterHealthComponent extends GameComponent {
               </Row>
             </Col>
           </Row>
-          {this.state.monsterHealth.defaultScenarioLevel > -1 && this.state.monsterHealth.defaultNumPlaying > -1 &&
+          {this.state.monsterHealth.defaultScenarioLevel > -1 && this.state.monsterHealth.defaultNumPlaying > -1
+            && (
             <Row className="monster-health-row">
               <Col xs={6} md={6}>
-                <Button className="btn-scoundrel" block onClick={() => this.showScenarioChooser()}>Scenario</Button>
+                <Button className="btn-completed" block onClick={() => this.showScenarioChooser()}>Scenario</Button>
               </Col>
               <Col xs={6} md={6}>
-                <Button className="btn-scoundrel" block onClick={() => this.showMonsterChooser()}>Monster Types</Button>
+                <Button className="btn-completed" block onClick={() => this.showMonsterChooser()}>Monster Types</Button>
               </Col>
             </Row>
-          }
-          {(this.state.monsterHealth.scenario > -1 || this.isMonstersChosen()) &&
+            )}
+          {(this.state.monsterHealth.scenario > -1 || this.isMonstersChosen()) && (
             <Row className="monster-health-row">
               {monsterHeaderButtons}
             </Row>
-          }
+            )}
           <Row className="monster-heath-monsters-container">
             {displayedMonsterSections}
           </Row>
-          <hr/>
-          {(this.state.monsterHealth.scenario > -1 || this.isMonstersChosen()) &&
+          <hr />
+          {(this.state.monsterHealth.scenario > -1 || this.isMonstersChosen()) && (
             <Row className="status-token-buttons">
               <Col xs={12} md={4}>
                 <Button block onClick={() => this.clearStatusEffectToggles()}>Unselect All</Button>
               </Col>
               {statusEffectToggles}
               <Col xs={12} md={4}>
-                <Button block className={this.state.endMonsterRoundToggled ? "btn-doomstalker" : ""} onClick={() => this.toggleEndOfMonsterRound()}>End Monster Turn</Button>
+                <Button block className={this.state.endMonsterRoundToggled ? 'btn-unlocked' : ''} onClick={() => this.toggleEndOfMonsterRound()}>End Monster Turn</Button>
               </Col>
               <Col xs={12} md={4}>
-                <Button block className={this.state.clearAllStatusEffectsToggled ? "btn-doomstalker" : ""} onClick={() => this.toggleClearAllStatusEffects()}>Clear All Status Effects</Button>
+                <Button block className={this.state.clearAllStatusEffectsToggled ? 'btn-unlocked' : ''} onClick={() => this.toggleClearAllStatusEffects()}>Clear All Status Effects</Button>
               </Col>
               <Col xs={6} md={2}>
-                <Button block className={this.state.healToggled ? "btn-doomstalker" : ""} onClick={() => this.toggleHeal()}>Heal {this.state.healAmount}</Button>
+                <Button block className={this.state.healToggled ? 'btn-unlocked' : ''} onClick={() => this.toggleHeal()}>
+                  Heal
+                  {this.state.healAmount}
+                </Button>
               </Col>
               <Col xs={3} md={1}>
-                <Button block className="btn-doomstalker" onClick={() => this.toggleHealChange(-1)}>-</Button>
+                <Button block className="btn-unlocked" onClick={() => this.toggleHealChange(-1)}>-</Button>
               </Col>
               <Col xs={3} md={1}>
                 <Button block className="btn-brute" onClick={() => this.toggleHealChange(1)}>+</Button>
               </Col>
             </Row>
-          }
-          <hr/>
+            )}
+          <hr />
           <Row className="monster-health-row">
             <Col xs={12} md={12}>
               <p><strong>Instructions:</strong></p>
@@ -1059,7 +1031,7 @@ class MonsterHealthComponent extends GameComponent {
               </ol>
             </Col>
           </Row>
-      	</Grid>
+        </Grid>
       </div>
     );
   }

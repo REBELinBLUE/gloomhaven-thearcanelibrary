@@ -1,11 +1,13 @@
 import React from 'react';
 import _ from 'underscore';
-import { Grid, Row, Col, Table, Glyphicon, Button, Label } from 'react-bootstrap';
+import {
+  Grid, Row, Col, Table, Glyphicon, Button, Label,
+} from 'react-bootstrap';
 import GameActions from '../actions/GameActions';
 import GameComponent from './GameComponent';
 import ExpansionConstants from '../constants/ExpansionConstants';
-import {SCENARIOS} from '../constants/Scenarios';
-import {TREASURES} from '../constants/Treasures';
+import { SCENARIOS } from '../constants/Scenarios';
+import { TREASURES } from '../constants/Treasures';
 
 const DONATION_MILESTONES = [10, 15, 20, 25, 30, 35, 40, 50, 60, 70, 80, 90, 100];
 
@@ -60,44 +62,44 @@ class ProsperityComponent extends GameComponent {
         newProsperity = 0;
       }
 
-      return {donations: newDonations, prosperity: newProsperity};
+      return { donations: newDonations, prosperity: newProsperity };
     });
   }
 
   /* takes in the number of checkmarks and outputs the prosperity level */
   prosperityLevel(ticks) {
     switch (true) {
-        case (ticks < 4):
-            return 1;
-        case (ticks < 9):
-            return 2;
-          case (ticks < 15):
-            return 3;
-          case (ticks < 22):
-            return 4;
-          case (ticks < 30):
-            return 5;
-          case (ticks < 39):
-            return 6;
-          case (ticks < 50):
-            return 7;
-          case (ticks < 64):
-            return 8;
-          case (ticks >= 64):
-            return 9;
-        default:
-            return 1;
+      case (ticks < 4):
+        return 1;
+      case (ticks < 9):
+        return 2;
+      case (ticks < 15):
+        return 3;
+      case (ticks < 22):
+        return 4;
+      case (ticks < 30):
+        return 5;
+      case (ticks < 39):
+        return 6;
+      case (ticks < 50):
+        return 7;
+      case (ticks < 64):
+        return 8;
+      case (ticks >= 64):
+        return 9;
+      default:
+        return 1;
     }
   }
 
   getScenarioNumber(tresureNumber) {
     for (const [number, scenario] of Object.entries(SCENARIOS)) {
-      const treasures = scenario.treasures;
+      const { treasures } = scenario;
       if (treasures && treasures.indexOf(tresureNumber) >= 0) {
         return scenario.symbol || number;
       }
     }
-    console.error("Treasure not found for " + tresureNumber + "!");
+    console.error(`Treasure not found for ${tresureNumber}!`);
   }
 
   makeTreasureColumn(number, availableTreasures, treasuresInCompleteScenarios) {
@@ -105,7 +107,7 @@ class ProsperityComponent extends GameComponent {
     let available = false;
     let treasureInCompleteScenario = false;
 
-    let treasure = TREASURES[number];
+    const treasure = TREASURES[number];
 
     if (availableTreasures.indexOf(number) >= 0) {
       available = true;
@@ -122,25 +124,23 @@ class ProsperityComponent extends GameComponent {
 
     let buttonText = number;
     if (unlocked) {
-      buttonText += " - " + treasure.title;
+      buttonText += ` - ${treasure.title}`;
     }
 
-    let buttonStyle = "";
+    let buttonStyle = '';
     if (unlocked) {
-      buttonStyle = "btn-scoundrel";
-    }
-    else if (treasureInCompleteScenario) {
-      buttonStyle = "btn-lightning";
+      buttonStyle = 'btn-completed';
+    } else if (treasureInCompleteScenario) {
+      buttonStyle = 'btn-blocked';
 
       // also add some text to button to let user know which scenario they missed treasure from
-      buttonText += " - Missed in scenario " + this.getScenarioNumber(number);
-    }
-    else if (available) {
-      buttonStyle = "btn-doomstalker";
+      buttonText += ` - Missed in scenario ${this.getScenarioNumber(number)}`;
+    } else if (available) {
+      buttonStyle = 'btn-unlocked';
     }
 
     return (
-      <Col key={number} xs={12} md={4} lg={3} >
+      <Col key={number} xs={12} md={4} lg={3}>
         <Button className={buttonStyle} onClick={() => this.toggleTreasure(number, availableTreasures)} block>{buttonText}</Button>
       </Col>
     );
@@ -148,24 +148,22 @@ class ProsperityComponent extends GameComponent {
 
   toggleTreasure(number, availableTreasures) {
     this.setStateAndUpdateGame((state) => {
-      let treasuresUnlockedCopy = state.treasuresUnlocked.slice(0);
+      const treasuresUnlockedCopy = state.treasuresUnlocked.slice(0);
 
-      let indexOfScenarioToRemoveFromUnlocked = treasuresUnlockedCopy.indexOf(number);
+      const indexOfScenarioToRemoveFromUnlocked = treasuresUnlockedCopy.indexOf(number);
 
       if (indexOfScenarioToRemoveFromUnlocked >= 0) {
         // we already unlocked this treasure: mark it as locked again (this allows users to undo their mistakes)
         treasuresUnlockedCopy.splice(indexOfScenarioToRemoveFromUnlocked, 1);
-      }
-      else if (availableTreasures.indexOf(number) >= 0) {
+      } else if (availableTreasures.indexOf(number) >= 0) {
         // we have not already unlocked this treasure, and it is actually available to us based on unlocked scenarios: mark it as unlocked
         treasuresUnlockedCopy.push(number);
       }
 
       // otherwise, if it's not yet unlocked but we don't have access to it: do nothing (the user must unlock the relevant scenario first)
       return {
-        treasuresUnlocked: treasuresUnlockedCopy
+        treasuresUnlocked: treasuresUnlockedCopy,
       };
-
     });
   }
 
@@ -187,13 +185,13 @@ class ProsperityComponent extends GameComponent {
 
   render() {
     // treasures
-    let treasureColumns = [];
+    const treasureColumns = [];
 
-    let availableTreasures = this.makeAvailableTreasures();
-    let treasuresInCompleteScenarios = this.makeTreasuresInCompleteScenarios();
+    const availableTreasures = this.makeAvailableTreasures();
+    const treasuresInCompleteScenarios = this.makeTreasuresInCompleteScenarios();
 
     treasureColumns.push(<Col lg={12} key="t0"><h2>{ExpansionConstants.BASE}</h2></Col>);
-    for (let i=1; i<TREASURES.length; i++) {
+    for (let i = 1; i < TREASURES.length; i++) {
       if (i === 76) {
         treasureColumns.push(<Col lg={12} key="t1"><h2>{ExpansionConstants.FORGOTTEN_CIRCLES}</h2></Col>);
       }
@@ -201,45 +199,41 @@ class ProsperityComponent extends GameComponent {
     }
 
     // prosperity
-    let level = this.prosperityLevel(this.state.prosperity);
-    let unlocked = <Glyphicon glyph="check" />
+    const level = this.prosperityLevel(this.state.prosperity);
+    const unlocked = <Glyphicon glyph="check" />;
 
-    let prosperityChecks = [];
+    const prosperityChecks = [];
 
-    for (let i=1; i<=this.state.prosperity; i++) {
+    for (let i = 1; i <= this.state.prosperity; i++) {
       if ([4, 9, 15, 22, 30, 39, 50, 64].indexOf(i) > -1) {
         prosperityChecks.push(<Glyphicon className="milestone" glyph="check" key={i} />);
-      }
-      else {
+      } else {
         prosperityChecks.push(<Glyphicon glyph="check" key={i} />);
       }
     }
 
-    for (let i=this.state.prosperity + 1; i<=64; i++) {
+    for (let i = this.state.prosperity + 1; i <= 64; i++) {
       if ([4, 9, 15, 22, 30, 39, 50, 64].indexOf(i) > -1) {
         prosperityChecks.push(<Glyphicon className="milestone" glyph="unchecked" key={i} />);
-      }
-      else {
+      } else {
         prosperityChecks.push(<Glyphicon glyph="unchecked" key={i} />);
       }
     }
 
-    let donationChecks = [];
+    const donationChecks = [];
 
-    for (let i=1; i<=this.state.donations && (this.state.donations >= 10 || i <=10); i++) {
+    for (let i = 1; i <= this.state.donations && (this.state.donations >= 10 || i <= 10); i++) {
       if (DONATION_MILESTONES.indexOf(i) > -1) {
         donationChecks.push(<Glyphicon className="milestone" glyph="check" key={i} />);
-      }
-      else {
+      } else {
         donationChecks.push(<Glyphicon glyph="check" key={i} />);
       }
     }
 
-    for (let i=this.state.donations + 1; i<=100 && (this.state.donations >= 10 || i <=10); i++) {
+    for (let i = this.state.donations + 1; i <= 100 && (this.state.donations >= 10 || i <= 10); i++) {
       if (DONATION_MILESTONES.indexOf(i) > -1) {
         donationChecks.push(<Glyphicon className="milestone" glyph="unchecked" key={i} />);
-      }
-      else {
+      } else {
         donationChecks.push(<Glyphicon glyph="unchecked" key={i} />);
       }
     }
@@ -266,10 +260,10 @@ class ProsperityComponent extends GameComponent {
                   <Label className="label-xxlarge label-brute">{level}</Label>
                 </Col>
                 <Col xs={6} md={6}>
-                  <Button href="#" className="btn-lightning" block onClick={this.decreaseProsperity.bind(this)}><Glyphicon glyph="minus" /></Button>
+                  <Button href="#" className="btn-blocked" block onClick={this.decreaseProsperity.bind(this)}><Glyphicon glyph="minus" /></Button>
                 </Col>
                 <Col xs={6} md={6}>
-                  <Button href="#" className="btn-scoundrel" block onClick={this.increaseProsperity.bind(this)}><Glyphicon glyph="plus" /></Button>
+                  <Button href="#" className="btn-completed" block onClick={this.increaseProsperity.bind(this)}><Glyphicon glyph="plus" /></Button>
                 </Col>
               </Row>
               <Row className="prosperity-checks-list">
@@ -285,10 +279,10 @@ class ProsperityComponent extends GameComponent {
                   <Label className="label-xxlarge label-brute">{this.state.donations * 10}</Label>
                 </Col>
                 <Col xs={6} md={6}>
-                  <Button href="#" className="btn-lightning" block onClick={() => this.donateToGreatOak(-1)}><Glyphicon glyph="minus" /></Button>
+                  <Button href="#" className="btn-blocked" block onClick={() => this.donateToGreatOak(-1)}><Glyphicon glyph="minus" /></Button>
                 </Col>
                 <Col xs={6} md={6}>
-                  <Button href="#" className="btn-scoundrel" block onClick={() => this.donateToGreatOak(1)}><Glyphicon glyph="plus" /></Button>
+                  <Button href="#" className="btn-completed" block onClick={() => this.donateToGreatOak(1)}><Glyphicon glyph="plus" /></Button>
                 </Col>
               </Row>
               <Row className="prosperity-checks-list">

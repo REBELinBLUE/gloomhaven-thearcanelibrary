@@ -1,7 +1,9 @@
 import React from 'react';
-import { Grid, Row, Col, Form, FormGroup, ControlLabel, FormControl, Button, Glyphicon, Well, Label } from 'react-bootstrap';
+import {
+  Grid, Row, Col, Form, FormGroup, ControlLabel, FormControl, Button, Glyphicon, Well, Label,
+} from 'react-bootstrap';
 import GameComponent from './GameComponent';
-import {PARTY_ACHIEVEMENTS} from '../constants/Party';
+import { PARTY_ACHIEVEMENTS } from '../constants/Party';
 import ExpansionConstants from '../constants/ExpansionConstants';
 
 const possiblePartyAchievements = [
@@ -34,8 +36,8 @@ const possiblePartyAchievements = [
       PARTY_ACHIEVEMENTS.THROUGH_THE_RUINS,
       PARTY_ACHIEVEMENTS.THROUGH_THE_TRENCH,
       PARTY_ACHIEVEMENTS.TREMORS,
-      PARTY_ACHIEVEMENTS.WATER_STAFF
-    ]
+      PARTY_ACHIEVEMENTS.WATER_STAFF,
+    ],
   ],
   [ExpansionConstants.FORGOTTEN_CIRCLES,
     [
@@ -53,8 +55,8 @@ const possiblePartyAchievements = [
       PARTY_ACHIEVEMENTS.OPPORTUNISTS,
       PARTY_ACHIEVEMENTS.SABOTEURS,
       PARTY_ACHIEVEMENTS.XANGROTHS_AID,
-    ]
-  ]
+    ],
+  ],
 ];
 
 class PartyComponent extends GameComponent {
@@ -66,50 +68,44 @@ class PartyComponent extends GameComponent {
   getStateFromGame(game) {
     return {
       partyAchievements: game.partyAchievements || {},
-      name: game.name || "",
-      partyLocation: game.partyLocation || "",
+      name: game.name || '',
+      partyLocation: game.partyLocation || '',
       reputation: game.reputation || 0,
-      partyNotes: game.partyNotes || "",
+      partyNotes: game.partyNotes || '',
     };
   }
 
   increaseReputation() {
-    this.setStateAndUpdateGame((state) => {
-      return {reputation: Math.min(20, state.reputation + 1)};
-    });
+    this.setStateAndUpdateGame((state) => ({ reputation: Math.min(20, state.reputation + 1) }));
   }
 
   decreaseReputation() {
-    this.setStateAndUpdateGame((state) => {
-      return {reputation: Math.max(-20, state.reputation - 1)};
-    });
+    this.setStateAndUpdateGame((state) => ({ reputation: Math.max(-20, state.reputation - 1) }));
   }
 
   handleInputChange(event) {
-    const target = event.target;
+    const { target } = event;
     const value = target.type === 'checkbox' ? target.checked : target.value;
-    const name = target.name;
+    const { name } = target;
 
     this.setStateAndUpdateGame({
-      [name]: value
+      [name]: value,
     });
   }
 
   toggleAchievement(achievement) {
     this.setStateAndUpdateGame((state) => {
-      let partyAchievementsCopy = Object.assign({}, state.partyAchievements);
+      const partyAchievementsCopy = { ...state.partyAchievements };
 
-      if (partyAchievementsCopy[achievement] === "true") {
-        partyAchievementsCopy[achievement] = "lost";
-      }
-      else if (partyAchievementsCopy[achievement] === "lost") {
+      if (partyAchievementsCopy[achievement] === 'true') {
+        partyAchievementsCopy[achievement] = 'lost';
+      } else if (partyAchievementsCopy[achievement] === 'lost') {
         partyAchievementsCopy[achievement] = null;
-      }
-      else {
-        partyAchievementsCopy[achievement] = "true"
+      } else {
+        partyAchievementsCopy[achievement] = 'true';
       }
       return {
-        partyAchievements: partyAchievementsCopy
+        partyAchievements: partyAchievementsCopy,
       };
     });
   }
@@ -119,64 +115,53 @@ class PartyComponent extends GameComponent {
 
     if (this.state.reputation >= 19) {
       shopPriceModifier = -5;
-    }
-    else if (this.state.reputation >= 15) {
+    } else if (this.state.reputation >= 15) {
       shopPriceModifier = -4;
-    }
-    else if (this.state.reputation >= 11) {
+    } else if (this.state.reputation >= 11) {
       shopPriceModifier = -3;
-    }
-    else if (this.state.reputation >= 7) {
+    } else if (this.state.reputation >= 7) {
       shopPriceModifier = -2;
-    }
-    else if (this.state.reputation >= 3) {
+    } else if (this.state.reputation >= 3) {
       shopPriceModifier = -1;
-    }
-    else if (this.state.reputation >= -2) {
+    } else if (this.state.reputation >= -2) {
       shopPriceModifier = 0;
-    }
-    else if (this.state.reputation >= -6) {
+    } else if (this.state.reputation >= -6) {
       shopPriceModifier = 1;
-    }
-    else if (this.state.reputation >= -10) {
+    } else if (this.state.reputation >= -10) {
       shopPriceModifier = 2;
-    }
-    else if (this.state.reputation >= -14) {
+    } else if (this.state.reputation >= -14) {
       shopPriceModifier = 3;
-    }
-    else if (this.state.reputation >= -18) {
+    } else if (this.state.reputation >= -18) {
       shopPriceModifier = 4;
-    }
-    else if (this.state.reputation >= -20) {
+    } else if (this.state.reputation >= -20) {
       shopPriceModifier = 5;
-    }
-    else {
+    } else {
       shopPriceModifier = 0;
     }
 
-    let achievementHtml = [];
-    for (let [expIndex, [title, expAchievements]] of possiblePartyAchievements.entries()) {
-      let achievementColumns = [];
-      for (let i=0; i<expAchievements.length; i++) {
-        let achievement = expAchievements[i];
+    const achievementHtml = [];
+    for (const [expIndex, [title, expAchievements]] of possiblePartyAchievements.entries()) {
+      const achievementColumns = [];
+      for (let i = 0; i < expAchievements.length; i++) {
+        const achievement = expAchievements[i];
 
-        let buttonStyle = "";
+        let buttonStyle = '';
         if (this.state.partyAchievements) {
-          if (this.state.partyAchievements[achievement] === "true") {
-            buttonStyle = "btn-scoundrel";
-          }
-          else if (this.state.partyAchievements[achievement] === "lost") {
-            buttonStyle = "btn-lightning";
+          if (this.state.partyAchievements[achievement] === 'true') {
+            buttonStyle = 'btn-completed';
+          } else if (this.state.partyAchievements[achievement] === 'lost') {
+            buttonStyle = 'btn-blocked';
           }
         }
 
-        achievementColumns.push(<Col xs={12} md={6} lg={4} key={i}><Button className={buttonStyle} block onClick={() => this.toggleAchievement(achievement)}>{achievement}</Button></Col>)
+        achievementColumns.push(<Col xs={12} md={6} lg={4} key={i}><Button className={buttonStyle} block onClick={() => this.toggleAchievement(achievement)}>{achievement}</Button></Col>);
       }
       achievementHtml.push(
         <Row className="achievements-container" key={expIndex}>
           <Col lg={12}><h2>{title}</h2></Col>
           {achievementColumns}
-        </Row>);
+        </Row>,
+      );
     }
 
     return (
@@ -211,8 +196,8 @@ class PartyComponent extends GameComponent {
               <Well bsSize="large" className="reputation-well">
                 <Row>
                   <Col xs={4} md={4}>
-                    <Button className="btn-scoundrel" block onClick={()=>this.increaseReputation()}><Glyphicon glyph="plus" /></Button>
-                    <Button className="btn-lightning" block onClick={()=>this.decreaseReputation()}><Glyphicon glyph="minus" /></Button>
+                    <Button className="btn-completed" block onClick={() => this.increaseReputation()}><Glyphicon glyph="plus" /></Button>
+                    <Button className="btn-blocked" block onClick={() => this.decreaseReputation()}><Glyphicon glyph="minus" /></Button>
                   </Col>
                   <Col xs={4} md={4} className="text-center">
                     <Row>
@@ -245,13 +230,13 @@ class PartyComponent extends GameComponent {
           </Row>
           <Row className="party-achievements-key">
             <Col xs={12} md={4} className="text-center">
-              <Button className="btn-scoundrel">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button> Achievement Unlocked
+              <Button className="btn-completed">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button> Achievement Unlocked
             </Col>
             <Col xs={12} md={4} className="text-center">
               <Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button> Achievement Locked
             </Col>
             <Col xs={12} md={4} className="text-center">
-              <Button className="btn-lightning">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button> Achievement Lost
+              <Button className="btn-blocked">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button> Achievement Lost
             </Col>
           </Row>
           {achievementHtml}

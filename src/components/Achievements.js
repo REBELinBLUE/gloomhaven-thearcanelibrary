@@ -1,7 +1,9 @@
 import React from 'react';
-import { Grid, Row, Col, Button } from 'react-bootstrap';
+import {
+  Grid, Row, Col, Button,
+} from 'react-bootstrap';
 import GameComponent from './GameComponent';
-import {GLOBAL_ACHIEVEMENTS} from '../constants/Achievements';
+import { GLOBAL_ACHIEVEMENTS } from '../constants/Achievements';
 import ExpansionConstants from '../constants/ExpansionConstants';
 
 const possibleAchievements = [
@@ -11,7 +13,7 @@ const possibleAchievements = [
       GLOBAL_ACHIEVEMENTS.ANCIENT_TECHNOLOGY_2,
       GLOBAL_ACHIEVEMENTS.ANCIENT_TECHNOLOGY_3,
       GLOBAL_ACHIEVEMENTS.ANCIENT_TECHNOLOGY_4,
-      GLOBAL_ACHIEVEMENTS.ANCIENT_TECHNOLOGY_5
+      GLOBAL_ACHIEVEMENTS.ANCIENT_TECHNOLOGY_5,
     ],
     [
       GLOBAL_ACHIEVEMENTS.ARTIFACT_RECOVERED,
@@ -46,7 +48,7 @@ const possibleAchievements = [
       GLOBAL_ACHIEVEMENTS.THE_POWER_OF_ENHANCEMENT,
       GLOBAL_ACHIEVEMENTS.THE_RIFT_NEUTRALIZED,
       GLOBAL_ACHIEVEMENTS.WATER_BREATHING,
-    ]
+    ],
   ]],
   [ExpansionConstants.FORGOTTEN_CIRCLES, [
     [
@@ -70,8 +72,8 @@ const possibleAchievements = [
       GLOBAL_ACHIEVEMENTS.PIECES_OF_AN_ARTIFACT_2,
       GLOBAL_ACHIEVEMENTS.PIECES_OF_AN_ARTIFACT_3,
       GLOBAL_ACHIEVEMENTS.MECHANICAL_SPLENDOR,
-    ]
-  ]]
+    ],
+  ]],
 ];
 
 class AchievementsComponent extends GameComponent {
@@ -83,82 +85,79 @@ class AchievementsComponent extends GameComponent {
 
   toggleAchievement(achievement) {
     this.setStateAndUpdateGame((state) => {
-      let globalAchievementsCopy = Object.assign({}, state.globalAchievements);
+      const globalAchievementsCopy = { ...state.globalAchievements };
 
       if (globalAchievementsCopy[achievement]) {
         globalAchievementsCopy[achievement] = null;
-      }
-      else {
+      } else {
         // only one artifact achievement allowed
-        if (achievement.startsWith("Artifact")) {
+        if (achievement.startsWith('Artifact')) {
           globalAchievementsCopy[GLOBAL_ACHIEVEMENTS.ARTIFACT_RECOVERED] = null;
           globalAchievementsCopy[GLOBAL_ACHIEVEMENTS.ARTIFACT_CLEANSED] = null;
           globalAchievementsCopy[GLOBAL_ACHIEVEMENTS.ARTIFACT_LOST] = null;
         }
 
-        if (achievement.startsWith("The Drake")) {
+        if (achievement.startsWith('The Drake')) {
           globalAchievementsCopy[GLOBAL_ACHIEVEMENTS.THE_DRAKE_AIDED] = null;
           globalAchievementsCopy[GLOBAL_ACHIEVEMENTS.THE_DRAKE_SLAIN] = null;
         }
 
-        if (achievement.startsWith("City Rule")) {
+        if (achievement.startsWith('City Rule')) {
           globalAchievementsCopy[GLOBAL_ACHIEVEMENTS.CITY_RULE_DEMONIC] = null;
           globalAchievementsCopy[GLOBAL_ACHIEVEMENTS.CITY_RULE_ECONOMIC] = null;
           globalAchievementsCopy[GLOBAL_ACHIEVEMENTS.CITY_RULE_MILITARISTIC] = null;
         }
 
-        if (achievement.startsWith("The Voice")) {
+        if (achievement.startsWith('The Voice')) {
           globalAchievementsCopy[GLOBAL_ACHIEVEMENTS.THE_VOICE_FREED] = null;
           globalAchievementsCopy[GLOBAL_ACHIEVEMENTS.THE_VOICE_SILENCED] = null;
         }
 
-        if (achievement.startsWith("The Demon Dethroned")) {
+        if (achievement.startsWith('The Demon Dethroned')) {
           globalAchievementsCopy[GLOBAL_ACHIEVEMENTS.THE_RIFT_CLOSED] = null;
-        }
-        else if (achievement.startsWith("The Rift Closed")) {
+        } else if (achievement.startsWith('The Rift Closed')) {
           globalAchievementsCopy[GLOBAL_ACHIEVEMENTS.THE_DEMON_DETHRONED] = null;
         }
 
-        globalAchievementsCopy[achievement] = "true"
+        globalAchievementsCopy[achievement] = 'true';
       }
 
       return {
-        globalAchievements: globalAchievementsCopy
-      }
+        globalAchievements: globalAchievementsCopy,
+      };
     });
   }
 
   render() {
-    let achievementHtml = [];
+    const achievementHtml = [];
 
-    for (let [expIndex, [title, expAchievements]] of possibleAchievements.entries()) {
+    for (const [expIndex, [title, expAchievements]] of possibleAchievements.entries()) {
       achievementHtml.push(<h2 key={expIndex}>{title}</h2>);
 
-      for (let i=0; i<expAchievements.length; i++) {
-        let achievementButtons = [];
+      for (let i = 0; i < expAchievements.length; i++) {
+        const achievementButtons = [];
 
-        for (let j=0; j<expAchievements[i].length; j++) {
-
-          let achievement = expAchievements[i][j];
-          let buttonStyle = "";
+        for (let j = 0; j < expAchievements[i].length; j++) {
+          const achievement = expAchievements[i][j];
+          let buttonStyle = '';
 
           if (this.state.globalAchievements && this.state.globalAchievements[achievement]) {
-            buttonStyle = "btn-scoundrel";
+            buttonStyle = 'btn-completed';
           }
 
-          achievementButtons.push(<Col xs={12} md={6} lg={4} key={j}><Button className={buttonStyle} block onClick={()=>this.toggleAchievement(achievement)}>{achievement}</Button></Col>)
+          achievementButtons.push(<Col xs={12} md={6} lg={4} key={j}><Button className={buttonStyle} block onClick={() => this.toggleAchievement(achievement)}>{achievement}</Button></Col>);
         }
 
         let divider = null;
         if (i < expAchievements.length - 1) {
-          divider = <hr />
+          divider = <hr />;
         }
 
         achievementHtml.push(
-          <div key={expIndex+'-'+i}>
+          <div key={`${expIndex}-${i}`}>
             <Row>{achievementButtons}</Row>
             {divider}
-          </div>
+          </div>,
         );
       }
     }

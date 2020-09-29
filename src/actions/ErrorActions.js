@@ -13,10 +13,10 @@ export default {
     AppDispatcher.dispatch({
       actionType: ErrorConstants.SHOW_ERROR,
       error: {
-        originalError: originalError,
-        message: message
-      }
+        originalError,
+        message,
+      },
     });
-  }
+  },
 
-}
+};

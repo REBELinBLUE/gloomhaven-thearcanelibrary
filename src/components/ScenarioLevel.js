@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Grid, Row, Col, Button, Label } from 'react-bootstrap';
+import {
+  Grid, Row, Col, Button, Label,
+} from 'react-bootstrap';
 
 class ScenarioLevelComponent extends Component {
-
   constructor() {
     super();
 
@@ -10,7 +11,7 @@ class ScenarioLevelComponent extends Component {
       character1: 0,
       character2: 0,
       character3: 0,
-      character4: 0
+      character4: 0,
     };
   }
 
@@ -18,20 +19,19 @@ class ScenarioLevelComponent extends Component {
     if (this.state[character] === value) {
       // button is already on this value - clear it
       this.setState({
-        [character]: 0
+        [character]: 0,
       });
-    }
-    else {
+    } else {
       this.setState({
-        [character]: value
-      });  
+        [character]: value,
+      });
     }
   }
 
   createButton(value, activeValue, stateProperty) {
     return (
       <Col xs={1} md={1} key={value}>
-        <Button onClick={() => this.levelButtonClick(stateProperty, value)} className={activeValue === value ? "btn-doomstalker" : ""} block>{value}</Button>
+        <Button onClick={() => this.levelButtonClick(stateProperty, value)} className={activeValue === value ? 'btn-unlocked' : ''} block>{value}</Button>
       </Col>
     );
   }
@@ -40,10 +40,10 @@ class ScenarioLevelComponent extends Component {
     let numberCharacters = 0;
     let totalLevels = 0;
 
-    let levels = [this.state.character1, this.state.character2, this.state.character3, this.state.character4];
+    const levels = [this.state.character1, this.state.character2, this.state.character3, this.state.character4];
 
-    for (let i=0; i<levels.length; i++) {
-      let level = levels[i];
+    for (let i = 0; i < levels.length; i++) {
+      const level = levels[i];
 
       if (level > 0) {
         totalLevels += level;
@@ -51,46 +51,46 @@ class ScenarioLevelComponent extends Component {
       }
     }
 
-    let averageLevel = totalLevels / numberCharacters;
+    const averageLevel = totalLevels / numberCharacters;
 
     return Math.ceil(averageLevel / 2);
   }
 
   render() {
-    let character1Buttons = [];
-    let character2Buttons = [];
-    let character3Buttons = [];
-    let character4Buttons = [];
+    const character1Buttons = [];
+    const character2Buttons = [];
+    const character3Buttons = [];
+    const character4Buttons = [];
 
-    for (let i=1; i<=9; i++) {
-      character1Buttons.push(this.createButton(i, this.state.character1, "character1"));
-      character2Buttons.push(this.createButton(i, this.state.character2, "character2"));
-      character3Buttons.push(this.createButton(i, this.state.character3, "character3"));
-      character4Buttons.push(this.createButton(i, this.state.character4, "character4"));
+    for (let i = 1; i <= 9; i++) {
+      character1Buttons.push(this.createButton(i, this.state.character1, 'character1'));
+      character2Buttons.push(this.createButton(i, this.state.character2, 'character2'));
+      character3Buttons.push(this.createButton(i, this.state.character3, 'character3'));
+      character4Buttons.push(this.createButton(i, this.state.character4, 'character4'));
     }
 
     return (
       <div className="container">
-      	<Grid>
+        <Grid>
           <Row>
             <Col xs={12} md={12}>
               <p>Select each of your characters' levels and the <strong>normal scenario level</strong> for your party will be displayed below. You can play on <strong>Easy</strong> (the indicated level -1), <strong>Normal</strong> (the indicated level), <strong>Hard</strong> (the indicated level +1) or <strong>Very Hard</strong> (the indicated level +2).</p>
             </Col>
           </Row>
-      		<Row className="scenario-level-row">
-            <Col xs={0} md={1}></Col>
-      			{character1Buttons}
-      		</Row>
           <Row className="scenario-level-row">
-            <Col xs={0} md={1}></Col>
+            <Col xs={0} md={1} />
+            {character1Buttons}
+          </Row>
+          <Row className="scenario-level-row">
+            <Col xs={0} md={1} />
             {character2Buttons}
           </Row>
           <Row className="scenario-level-row">
-            <Col xs={0} md={1}></Col>
+            <Col xs={0} md={1} />
             {character3Buttons}
           </Row>
           <Row className="scenario-level-row">
-            <Col xs={0} md={1}></Col>
+            <Col xs={0} md={1} />
             {character4Buttons}
           </Row>
           <Row>
@@ -99,7 +99,7 @@ class ScenarioLevelComponent extends Component {
               <Label className="label-xxlarge label-brute">{this.normalScenarioLevel()}</Label>
             </Col>
           </Row>
-      	</Grid>
+        </Grid>
       </div>
     );
   }
