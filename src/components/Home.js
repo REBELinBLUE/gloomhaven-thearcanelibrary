@@ -125,7 +125,7 @@ class HomeComponent extends Component {
               <h3>Standalone Utilities <small className="hidden-xs">Direct links to useful pages</small></h3>
             </Col>
             <Col xs={12} md={6}>
-              <Button href="/utilities/enhancementCalculator" bsSize="large" block className="btn-brute">Enhancement Calculator</Button>
+              <Button href="/utilities/enhancementCalculator" bsSize="large" block className="btn-import">Enhancement Calculator</Button>
             </Col>
             <Col xs={12} md={6}>
               <Button href="/utilities/scenarioLevel" bsSize="large" block className="btn-unlocked">Scenario Level Calculator</Button>

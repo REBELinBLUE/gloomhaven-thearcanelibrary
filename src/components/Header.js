@@ -75,10 +75,10 @@ class HeaderComponent extends Component {
           </ul>
           <div className="navbar-btn">
             <FileReaderInput className="load-game-file-input" as="text" id="my-file-input" onChange={this.loadGame}>
-              <Button className="btn-brute"><Glyphicon glyph="save-file" /> Import</Button>
+              <Button className="btn-import"><Glyphicon glyph="save-file" /> Import</Button>
             </FileReaderInput>
             <div>
-              <Button className="btn-cragheart" onClick={this.saveGame.bind(this)}><Glyphicon glyph="open-file" /> Export</Button>
+              <Button className="btn-export" onClick={this.saveGame.bind(this)}><Glyphicon glyph="open-file" /> Export</Button>
             </div>
           </div>
         </Navbar.Collapse>

@@ -174,7 +174,7 @@ class MonsterHealthComponent extends GameComponent {
     if (isHeal) {
       text = '+';
       damageAmount = -1;
-      buttonClass = 'btn-brute';
+      buttonClass = 'btn-import';
     }
 
     if (!monsterToDisplay.alive) {
@@ -995,7 +995,7 @@ class MonsterHealthComponent extends GameComponent {
                 <Button block className="btn-unlocked" onClick={() => this.toggleHealChange(-1)}>-</Button>
               </Col>
               <Col xs={3} md={1}>
-                <Button block className="btn-brute" onClick={() => this.toggleHealChange(1)}>+</Button>
+                <Button block className="btn-import" onClick={() => this.toggleHealChange(1)}>+</Button>
               </Col>
             </Row>
             )}

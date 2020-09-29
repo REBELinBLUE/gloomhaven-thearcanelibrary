@@ -354,13 +354,13 @@ class ProsperityComponent extends GameComponent {
           </Row>
           <Row className="treasure-key">
             <Col xs={12} md={4} className="text-center">
-              <Button className="btn-scoundrel">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button> Treasure discovered
+              <Button className="btn-completed">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button> Treasure discovered
             </Col>
             <Col xs={12} md={4} className="text-center">
-              <Button className="btn-doomstalker">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button> Treasure in available scenario
+              <Button className="btn-unlocked">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button> Treasure in available scenario
             </Col>
             <Col xs={12} md={4} className="text-center">
-              <Button className="btn-lightning">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button> Missed Treasure in complete scenario
+              <Button className="btn-blocked">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Button> Missed Treasure in complete scenario
             </Col>
           </Row>
           <Row className="treasure-container">

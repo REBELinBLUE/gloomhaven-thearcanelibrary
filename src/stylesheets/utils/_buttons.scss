@@ -24,7 +24,7 @@
 		border-color: #adadad;
 	}
 
-	.btn-brute {
+	.btn-import {
 		@extend .btn-custom;
 		background-color: $colour-brute;
 		border-color: $colour-brute;
@@ -36,7 +36,7 @@
 		border-color: $colour-doomstalker;
 	}
 
-	.btn-cragheart {
+	.btn-export {
 		@extend .btn-custom;
 		background-color: $colour-cragheart;
 		border-color: $colour-cragheart;
