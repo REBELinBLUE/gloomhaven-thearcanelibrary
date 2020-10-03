@@ -2,6 +2,7 @@ import { EventEmitter } from 'events';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import GameConstants from '../constants/GameConstants';
 import { GLOBAL_ACHIEVEMENTS } from '../constants/Achievements';
+import { Character } from './CharacterStore'
 
 const CHANGE_GAME_EVENT = 'changeGame';
 const MAX_PROSPERITY = 64;
@@ -26,6 +27,7 @@ let _game = {
     scenario: -1,
     monsters: {},
   },
+  characters: [],
   ...upgradeGame(getGameLocalStorage()),
 };
 
@@ -114,6 +116,24 @@ class GameStoreClass extends EventEmitter {
 
   getGame() {
     return _game;
+  }
+
+  getCharacter(game, characterId) {
+    for (let characterIndex in game.characters) {
+      let cjson = game.characters[characterIndex];
+      if (cjson.id === characterId)
+        return Character.fromJSON(cjson);
+    }
+    return undefined;
+  }
+  saveCharacter(game, character) {
+    for (let characterIndex in game.characters) {
+      let cjson = game.characters[characterIndex];
+      if (cjson.id === character.id) {
+        character.saveToJson(cjson);
+        return;
+      }
+    }
   }
 }
 
